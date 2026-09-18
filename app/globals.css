@@ -202,7 +202,11 @@
 .eyebrow { color: var(--muted-foreground); }
 .tiny-square { display: inline-block; width: 5px; height: 5px; flex-shrink: 0; background: var(--primary); }
 .small-cross { color: var(--primary); font-family: var(--font-geist-mono), monospace; font-size: 20px; font-weight: 300; }
-.status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 4px #ff81460b; }
+.status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 4px #66c7ce1c; }
+.status-dot-error { background: var(--fire); box-shadow: 0 0 0 4px #efbd581c; }
+.refresh-feed, .event-official-link { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.refresh-feed { background: transparent; border: 0; font: inherit; font-size: 8px; padding: 0; }
+.event-official-link { display: flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 10px; }
 [data-slot="button"] { border-radius: 3px; font-size: 12px; font-weight: 550; }
 [data-slot="button"][data-size="lg"] { min-height: 43px; padding-inline: 19px; gap: 10px; }
 [data-slot="button"][data-variant="default"]:hover { background: #ff9563; }
