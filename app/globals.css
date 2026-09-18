@@ -778,6 +778,11 @@
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
+.contact-spinner { animation: contact-spin .8s linear infinite; }
+.form-feedback-success { color: var(--primary); }
+.form-feedback-error { color: var(--destructive); }
+@keyframes contact-spin { to { transform: rotate(360deg); } }
+
 .auth-page, .dashboard-page { min-height: 100vh; padding: 48px max(24px, 7vw); background: var(--background); color: var(--foreground); }
 .auth-page { display: grid; place-items: center; }
 .auth-card { width: min(440px, 100%); padding: 36px; border: 1px solid var(--border); background: var(--card); box-shadow: 0 20px 70px #0005; }
