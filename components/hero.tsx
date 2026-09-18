@@ -73,8 +73,8 @@ export function Hero() {
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
             <div className="hero-introduction">
-              <h2>Every earthquake. Every wildfire.<br />Every disaster alert. <span>One live map.</span></h2>
-              <p>A real-time global crisis intelligence platform fusing three official data sources — built for the responders and NGOs who don&apos;t have time for five different websites.</p>
+              <h2>Live earthquakes.<br />One focused view. <span>One live map.</span></h2>
+              <p>A focused crisis intelligence experience built around the live USGS earthquake feed — made for people who need clear signal without five different websites.</p>
               <div className="hero-buttons">
                 <Button size="lg" onClick={() => setExploring(true)}><Crosshair data-icon="inline-start" /> Explore the map <ArrowUpRight data-icon="inline-end" /></Button>
                 <a href="#solution" className={buttonVariants({ variant: 'ghost', size: 'lg' })}>Discover the project <ArrowDown data-icon="inline-end" /></a>
@@ -98,11 +98,11 @@ export function Hero() {
           </div>
           {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an illustrative event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>
-        <div className="map-attribution">Map: Natural Earth · Leaflet</div>
+        <div className="map-attribution">Map: OpenStreetMap · Leaflet</div>
       </section>
       <section className="source-strip" aria-label="Planned official data sources">
         <div className="page-width source-strip-inner">
-          <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>THREE TRUSTED SOURCES.<br /><strong>ONE COMMON PURPOSE.</strong></span></div>
+          <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>ONE LIVE SOURCE.<br /><strong>ONE CLEAR VIEW.</strong></span></div>
           <a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noreferrer" className="source-partner"><Activity aria-hidden="true" /><span><strong>USGS</strong><small>Earthquake intelligence</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noreferrer" className="source-partner"><Globe2 aria-hidden="true" /><span><strong>NASA <span className="source-subname">FIRMS</span></strong><small>Satellite fire detection</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <a href="https://www.gdacs.org/" target="_blank" rel="noreferrer" className="source-partner"><Layers3 aria-hidden="true" /><span><strong>GDACS</strong><small>Global disaster alerts</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
@@ -110,7 +110,7 @@ export function Hero() {
         </div>
       </section>
       <div className="page-width project-facts" aria-label="Project at a glance">
-        <div><strong>03</strong><span>Official data sources</span></div><div><strong>01</strong><span>Unified global view</span></div><div><strong>00</strong><span>Hardware required</span></div><div className="fact-final"><Globe2 aria-hidden="true" /><span>Global perspective.<br /><strong>Local impact.</strong></span><a href="#problem" aria-label="Scroll to the problem"><ArrowDown size={18} /></a></div>
+        <div><strong>01</strong><span>Live data source</span></div><div><strong>01</strong><span>Unified global view</span></div><div><strong>00</strong><span>Hardware required</span></div><div className="fact-final"><Globe2 aria-hidden="true" /><span>Global perspective.<br /><strong>Local impact.</strong></span><a href="#problem" aria-label="Scroll to the problem"><ArrowDown size={18} /></a></div>
       </div>
     </>
   )
