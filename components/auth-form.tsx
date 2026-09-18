@@ -10,12 +10,24 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setPending(true); setError('')
     const form = new FormData(event.currentTarget)
-    const result = mode === 'sign-in'
-      ? await signIn.email({ email: String(form.get('email')), password: String(form.get('password')), callbackURL: '/dashboard' })
-      : await signUp.email({ name: String(form.get('name')), email: String(form.get('email')), password: String(form.get('password')), callbackURL: '/dashboard' })
-    setPending(false)
-    if (result.error) { console.error('[v0] Authentication failed:', result.error); setError('Unable to authenticate with those details.'); return }
-    window.location.assign('/dashboard')
+    const email = String(form.get('email')).trim().toLowerCase()
+    const password = String(form.get('password'))
+    try {
+      const result = mode === 'sign-in'
+        ? await signIn.email({ email, password })
+        : await signUp.email({ name: String(form.get('name')).trim(), email, password })
+      if (result.error) {
+        console.error('[v0] Authentication failed:', result.error)
+        setError('Unable to authenticate with those details. Check your email and password, then try again.')
+        return
+      }
+      window.location.assign('/dashboard')
+    } catch (authError) {
+      console.error('[v0] Authentication request failed:', authError)
+      setError('Authentication is temporarily unavailable. Please try again.')
+    } finally {
+      setPending(false)
+    }
   }
 
   return <form onSubmit={submit} className="auth-form">
