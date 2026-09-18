@@ -795,5 +795,16 @@
 .dashboard-card { min-height: 250px; padding: 26px; border: 1px solid var(--border); background: var(--card); }
 .dashboard-card h2 { margin-top: 18px; font-size: 48px; color: var(--primary); }
 .dashboard-card p:not(.eyebrow) { min-height: 54px; margin: 12px 0 24px; color: var(--muted-foreground); line-height: 1.6; }
-@media (max-width: 640px) { .auth-card { padding: 24px; } .dashboard-header { flex-direction: column; } .dashboard-grid { grid-template-columns: 1fr; } }
+.dashboard-notice { max-width: 1000px; margin: 18px auto; padding: 12px 14px; border: 1px solid var(--border); color: var(--muted-foreground); }
+.dashboard-form { display: grid; gap: 12px; margin: 18px 0 22px; padding: 16px; border: 1px solid var(--border); background: color-mix(in srgb, var(--background) 80%, transparent); }
+.dashboard-form label { display: grid; gap: 6px; color: var(--muted-foreground); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.dashboard-form input { min-height: 38px; border: 1px solid var(--input); background: var(--background); color: var(--foreground); padding: 8px 10px; font-size: 14px; }
+.dashboard-form button { width: fit-content; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.dashboard-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-top: 1px solid var(--border); }
+.dashboard-item strong, .dashboard-item small { display: block; }
+.dashboard-item small { margin-top: 4px; color: var(--muted-foreground); font-size: 11px; }
+.dashboard-item button { min-height: 30px; padding: 0 9px; border: 1px solid var(--border); background: transparent; color: var(--foreground); font-size: 11px; }
+.dashboard-actions { display: flex; gap: 6px; }
+@media (max-width: 640px) { .auth-card { padding: 24px; } .dashboard-header { flex-direction: column; } .dashboard-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } .dashboard-item { align-items: flex-start; flex-direction: column; } }
 
