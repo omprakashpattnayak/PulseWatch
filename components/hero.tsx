@@ -45,7 +45,7 @@ export function Hero() {
         <div className="hero-map-shade" aria-hidden="true" />
         <div className="page-width hero-inner">
           <div className="hero-topline">
-            <div className="eyebrow competition-label"><span className="tiny-square" /> IEEE YESIST12 <span className="eyebrow-divider">/</span> STUDENT INNOVATION PROJECT</div>
+            <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
             <div className="prototype-label"><span className="status-dot" /> PROTOTYPE MODE</div>
           </div>
           <div className="hero-copy">
