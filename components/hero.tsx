@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 import { Activity, ArrowDown, ArrowRight, ArrowUpRight, Crosshair, Flame, Globe2, Layers3, Radio, ShieldCheck, Waves, X } from 'lucide-react'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -15,14 +16,19 @@ const CrisisMap = dynamic(() => import('@/components/crisis-map'), {
 })
 const categoryIcons = { earthquake: Activity, wildfire: Flame, climate: Waves }
 const allCategories: EventType[] = ['earthquake', 'wildfire', 'climate']
+const fetcher = (url: string) => fetch(url).then((response) => response.json())
 
 export function Hero() {
   const [exploring, setExploring] = useState(false)
   const [categories, setCategories] = useState<EventType[]>(allCategories)
   const [selected, setSelected] = useState<DemoEvent | null>(demoEvents[0])
   const [showDetails, setShowDetails] = useState(false)
-  const visibleEvents = demoEvents.filter((event) => categories.includes(event.type))
-  const SelectedIcon = selected ? categoryIcons[selected.type] : Activity
+  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; fetchedAt: string; source: string }>('/api/earthquakes', fetcher, { refreshInterval: 300000, revalidateOnFocus: false })
+  const liveEvents = data?.events ?? []
+  const events = liveEvents.length > 0 ? liveEvents : demoEvents
+  const visibleEvents = events.filter((event) => categories.includes(event.type))
+  const activeSelected = liveEvents.length > 0 && !selected?.url ? liveEvents[0] : selected
+  const SelectedIcon = activeSelected ? categoryIcons[activeSelected.type] : Activity
 
   function changeCategories(values: string[]) {
     const next = values.filter((value): value is EventType => allCategories.includes(value as EventType))
@@ -41,12 +47,12 @@ export function Hero() {
   return (
     <>
       <section className={cn('hero', exploring && 'is-exploring')} id="map" aria-labelledby="hero-title">
-        <div className="hero-map-layer"><CrisisMap categories={categories} selectedId={selected?.id ?? null} onSelect={selectEvent} exploring={exploring} /></div>
+        <div className="hero-map-layer"><CrisisMap events={events} categories={categories} selectedId={activeSelected?.id ?? null} onSelect={selectEvent} exploring={exploring} /></div>
         <div className="hero-map-shade" aria-hidden="true" />
         <div className="page-width hero-inner">
           <div className="hero-topline">
             <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
-            <div className="prototype-label"><span className="status-dot" /> PROTOTYPE MODE</div>
+            <div className="prototype-label"><span className={cn('status-dot', error && 'status-dot-error')} /> {isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE' : 'LIVE USGS FEED'}</div>
           </div>
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
@@ -61,18 +67,18 @@ export function Hero() {
             </div>
           </div>
           {exploring && <div className="explore-header"><p>One planet. Every signal.</p><Button variant="outline" onClick={() => { setExploring(false); setShowDetails(false) }}><X data-icon="inline-start" /> Exit map view</Button></div>}
-          {selected && (
-            <aside className={cn('map-event-card', `event-card-${selected.type}`)} aria-label="Selected illustrative event" aria-live="polite">
-              <div className="event-card-top"><span><SelectedIcon size={13} aria-hidden="true" /> {eventCategories[selected.type].label === 'Floods & climate' ? 'CLIMATE ALERT' : selected.type.toUpperCase()}</span><span className="event-sample">DEMO EVENT</span></div>
-              <div className="event-card-title"><h3>{selected.title}</h3><Button variant="ghost" size="icon-xs" aria-label="Dismiss selected event" onClick={() => { setSelected(null); setShowDetails(false) }}><X /></Button></div>
-              <div className="event-card-meta"><strong>{selected.magnitude}</strong><span className="meta-divider" />{selected.severity} severity<span className="event-source">{selected.source}</span></div>
-              {showDetails && <p className="event-description">{selected.description}</p>}
+          {activeSelected && (
+            <aside className={cn('map-event-card', `event-card-${activeSelected.type}`)} aria-label="Selected earthquake event" aria-live="polite">
+              <div className="event-card-top"><span><SelectedIcon size={13} aria-hidden="true" /> {eventCategories[activeSelected.type].label === 'Floods & climate' ? 'CLIMATE ALERT' : activeSelected.type.toUpperCase()}</span><span className="event-sample">{activeSelected.url ? 'LIVE EVENT' : 'DEMO EVENT'}</span></div>
+              <div className="event-card-title"><h3>{activeSelected.title}</h3><Button variant="ghost" size="icon-xs" aria-label="Dismiss selected event" onClick={() => { setSelected(null); setShowDetails(false) }}><X /></Button></div>
+              <div className="event-card-meta"><strong>{activeSelected.magnitude}</strong><span className="meta-divider" />{activeSelected.severity} severity<span className="event-source">{activeSelected.source}</span></div>
+              {showDetails && <><p className="event-description">{activeSelected.description}</p>{activeSelected.url && <a className="event-official-link" href={activeSelected.url} target="_blank" rel="noreferrer">Open official USGS event <ArrowUpRight size={13} aria-hidden="true" /></a>}</>}
               <button className="event-detail-button" onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'Hide event details' : 'View event details'}<ArrowUpRight size={13} aria-hidden="true" /></button>
             </aside>
           )}
           <div className="hero-map-footer">
             <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible disaster layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
-            <p className="map-demo-note"><span className="demo-note-desktop">INTERACTIVE PREVIEW</span><span className="map-note-divider">/</span><span aria-live="polite">{visibleEvents.length} illustrative events</span><span>Not live data</span></p>
+            <p className="map-demo-note"><span className="demo-note-desktop">{data?.source ?? 'USGS EARTHQUAKE HAZARDS PROGRAM'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
           </div>
           {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an illustrative event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>

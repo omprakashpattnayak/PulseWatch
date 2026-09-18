@@ -8,7 +8,7 @@ import type { FeatureCollection, GeometryCollection } from 'geojson'
 import worldData from 'world-atlas/countries-110m.json'
 import { LocateFixed, Minus, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { demoEvents, type DemoEvent, type EventType } from '@/lib/demo-events'
+import { type DemoEvent, type EventType } from '@/lib/demo-events'
 
 type WorldTopology = {
   type: 'Topology'
@@ -61,7 +61,8 @@ function MapControls({ exploring }: { exploring: boolean }) {
   )
 }
 
-export default function CrisisMap({ categories, selectedId, onSelect, exploring }: {
+export default function CrisisMap({ events, categories, selectedId, onSelect, exploring }: {
+  events: DemoEvent[]
   categories: EventType[]
   selectedId: string | null
   onSelect: (event: DemoEvent) => void
@@ -72,7 +73,7 @@ export default function CrisisMap({ categories, selectedId, onSelect, exploring 
       {gridLines.map((positions, index) => <Polyline key={index} positions={positions} pathOptions={{ color: '#263539', weight: 0.65, opacity: 0.43 }} interactive={false} />)}
       <GeoJSON data={land} style={{ fillColor: '#152326', fillOpacity: 1, color: '#304043', weight: 0.6, opacity: 0.85 }} interactive={false} />
       {continentLabels.map(({ text, position }) => <Marker key={text} position={position} interactive={false} keyboard={false} icon={divIcon({ className: 'continent-label', html: text, iconSize: [130, 16], iconAnchor: [65, 8] })} />)}
-      {demoEvents.filter((event) => categories.includes(event.type)).map((event) => (
+      {events.filter((event) => categories.includes(event.type)).map((event) => (
         <Marker key={event.id} position={event.coordinates} title={`Demo: ${event.magnitude}, ${event.title}`} alt={`View illustrative ${event.type} event in ${event.location}`} icon={divIcon({ className: `event-marker marker-${event.type}${selectedId === event.id ? ' marker-selected' : ''}`, html: '<span class="marker-halo"></span><span class="marker-ring"></span><span class="marker-core"></span>', iconSize: [36, 36], iconAnchor: [18, 18] })} eventHandlers={{ click: () => onSelect(event) }} />
       ))}
       <MapControls exploring={exploring} />
