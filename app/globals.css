@@ -778,3 +778,22 @@
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
+.auth-page, .dashboard-page { min-height: 100vh; padding: 48px max(24px, 7vw); background: var(--background); color: var(--foreground); }
+.auth-page { display: grid; place-items: center; }
+.auth-card { width: min(440px, 100%); padding: 36px; border: 1px solid var(--border); background: var(--card); box-shadow: 0 20px 70px #0005; }
+.auth-card h1, .dashboard-page h1 { margin-top: 12px; font-size: clamp(34px, 6vw, 58px); letter-spacing: -2px; }
+.auth-card > p:not(.eyebrow) { margin-top: 12px; color: var(--muted-foreground); line-height: 1.7; }
+.auth-form { display: grid; gap: 16px; margin: 28px 0 20px; }
+.auth-form label { display: grid; gap: 8px; color: var(--muted-foreground); font-size: 12px; }
+.auth-form input { min-height: 44px; border: 1px solid var(--input); background: var(--background); color: var(--foreground); padding: 10px 12px; }
+.auth-form button, .dashboard-card button, .dashboard-header > button { min-height: 42px; border: 1px solid var(--primary); background: var(--primary); color: var(--primary-foreground); padding: 0 16px; font-weight: 600; }
+.auth-form p[role="alert"] { color: var(--destructive); font-size: 12px; }
+.auth-card a { color: var(--primary); font-size: 13px; }
+.dashboard-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; max-width: 1000px; margin: 0 auto; padding-bottom: 44px; border-bottom: 1px solid var(--border); }
+.dashboard-header p:not(.eyebrow) { margin-top: 12px; color: var(--muted-foreground); }
+.dashboard-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; max-width: 1000px; margin: 28px auto; }
+.dashboard-card { min-height: 250px; padding: 26px; border: 1px solid var(--border); background: var(--card); }
+.dashboard-card h2 { margin-top: 18px; font-size: 48px; color: var(--primary); }
+.dashboard-card p:not(.eyebrow) { min-height: 54px; margin: 12px 0 24px; color: var(--muted-foreground); line-height: 1.6; }
+@media (max-width: 640px) { .auth-card { padding: 24px; } .dashboard-header { flex-direction: column; } .dashboard-grid { grid-template-columns: 1fr; } }
+
