@@ -67,19 +67,19 @@ export function Hero() {
         <div className="hero-map-shade" aria-hidden="true" />
         <div className="page-width hero-inner">
           <div className="hero-topline">
-            <div className="eyebrow competition-label"><span className="tiny-square" /> LIVE EARTHQUAKE INTELLIGENCE</div>
+            <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
             <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE · FALLBACK PINS' : 'LIVE FEED CONNECTED · USGS REAL-TIME'}</div>
           </div>
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
             <div className="hero-introduction">
-              <h2>Live earthquakes.<br />A clearer view of global risk. <span>One focused map.</span></h2>
-              <p>A focused crisis intelligence experience that brings the live USGS earthquake feed into one calm, readable view — built for people who need signal, not noise.</p>
+              <h2>Every earthquake. Every wildfire.<br />Every disaster alert. <span>One live map.</span></h2>
+              <p>A real-time global crisis intelligence platform fusing three official data sources — built for the responders and NGOs who don&apos;t have time for five different websites.</p>
               <div className="hero-buttons">
                 <Button size="lg" onClick={() => setExploring(true)}><Crosshair data-icon="inline-start" /> Explore the map <ArrowUpRight data-icon="inline-end" /></Button>
                 <a href="#solution" className={buttonVariants({ variant: 'ghost', size: 'lg' })}>Discover the project <ArrowDown data-icon="inline-end" /></a>
               </div>
-              <div className="hero-built-for"><span className="small-cross">+</span> OFFICIAL USGS DATA. CLEARER DECISIONS.</div>
+              <div className="hero-built-for"><span className="small-cross">+</span> BUILT FOR FASTER DECISIONS. NOT MORE TABS.</div>
             </div>
           </div>
           {exploring && <div className="explore-header"><p>One planet. Every signal.</p><Button variant="outline" onClick={() => { setExploring(false); setShowDetails(false) }}><X data-icon="inline-start" /> Exit map view</Button></div>}
@@ -96,13 +96,13 @@ export function Hero() {
             <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible disaster layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
             <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && data?.source ? data.source : error ? 'USGS FALLBACK VIEW' : 'USGS REAL-TIME FEED'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
           </div>
-          {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select a live earthquake</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
+          {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an illustrative event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>
         <div className="map-attribution">Map: Natural Earth · Leaflet</div>
       </section>
       <section className="source-strip" aria-label="Planned official data sources">
         <div className="page-width source-strip-inner">
-          <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>ONE LIVE SOURCE.<br /><strong>ONE CLEAR VIEW.</strong></span></div>
+          <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>THREE TRUSTED SOURCES.<br /><strong>ONE COMMON PURPOSE.</strong></span></div>
           <a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noreferrer" className="source-partner"><Activity aria-hidden="true" /><span><strong>USGS</strong><small>Earthquake intelligence</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noreferrer" className="source-partner"><Globe2 aria-hidden="true" /><span><strong>NASA <span className="source-subname">FIRMS</span></strong><small>Satellite fire detection</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <a href="https://www.gdacs.org/" target="_blank" rel="noreferrer" className="source-partner"><Layers3 aria-hidden="true" /><span><strong>GDACS</strong><small>Global disaster alerts</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
