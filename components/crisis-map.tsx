@@ -57,7 +57,7 @@ function MapControls({ exploring }: { exploring: boolean }) {
 
   return (
     <div className="map-zoom-controls">
-      <Button variant="outline" size="icon" onClick={() => map.zoomIn(0.5)} aria-label="Zoom in on map" title="Zoom in"><Plus /></Button>
+      <Button variant="outline" size="icon" onClick={() => map.zoomIn(1)} aria-label="Zoom in on map" title="Zoom in"><Plus /></Button>
       <Button variant="outline" size="icon" onClick={() => map.zoomOut(0.5)} aria-label="Zoom out on map"><Minus /></Button>
       <Button variant="outline" size="icon" onClick={resetView} aria-label="Reset global map view"><LocateFixed /></Button>
     </div>
@@ -72,7 +72,7 @@ export default function CrisisMap({ events, categories, selectedId, onSelect, ex
   exploring: boolean
 }) {
   return (
-    <MapContainer center={[19, 12]} zoom={2.25} minZoom={1} maxZoom={10} zoomDelta={0.5} zoomSnap={0.1} zoomControl={false} attributionControl={false} scrollWheelZoom={true} doubleClickZoom={true} dragging={true} touchZoom={true} keyboard={true} className="crisis-map" aria-label="Interactive demonstration world map of illustrative disaster events">
+    <MapContainer center={[19, 12]} zoom={2.25} minZoom={1} maxZoom={18} zoomDelta={1} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={false} scrollWheelZoom={true} doubleClickZoom={true} dragging={true} touchZoom={true} keyboard={true} className="crisis-map" aria-label="Interactive demonstration world map of illustrative disaster events">
       {gridLines.map((positions, index) => <Polyline key={index} positions={positions} pathOptions={{ color: '#263539', weight: 0.65, opacity: 0.43 }} interactive={false} />)}
       <GeoJSON data={land} style={{ fillColor: '#152326', fillOpacity: 1, color: '#304043', weight: 0.6, opacity: 0.85 }} interactive={false} />
       {continentLabels.map(({ text, position }) => <Marker key={text} position={position} interactive={false} keyboard={false} icon={divIcon({ className: 'continent-label', html: text, iconSize: [130, 16], iconAnchor: [65, 8] })} />)}
