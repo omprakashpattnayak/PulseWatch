@@ -240,8 +240,6 @@
 .crisis-map { height: 100%; width: 100%; background: #0a1215; font-family: var(--font-geist), sans-serif; cursor: grab; touch-action: pan-x pan-y pinch-zoom; }
 .crisis-map:active { cursor: grabbing; }
 .crisis-map .leaflet-container { touch-action: pan-x pan-y pinch-zoom; background: #0b1518; }
-.crisis-map .leaflet-tile-pane { filter: grayscale(1) invert(0.86) hue-rotate(150deg) saturate(0.38) contrast(1.12); }
-.crisis-map .leaflet-tile { image-rendering: auto; }
 .crisis-map .leaflet-control-attribution { display: none; }
 .hero-map-shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, #0a1012e8 0%, #0a1012c4 28%, #0a10123d 57%, #0a101209 100%), linear-gradient(0deg, #0a1012 0%, transparent 21%, transparent 76%, #0a1012e0 100%); }
 .hero-inner { position: relative; z-index: 2; min-height: inherit; pointer-events: none; }
@@ -658,7 +656,7 @@
   .hero-buttons > button { font-size: 10px; gap: 8px; padding-inline: 12px; height: 40px; }
   .hero-buttons > a { font-size: 10px; padding-inline: 10px; height: 40px; }
   .hero-built-for { font-size: 6px; letter-spacing: 0.9px; margin-top: 18px; }
-  .hero-map-layer { inset: 320px -135px 15px -135px; }
+  .hero-map-layer { inset: 320px 0 15px; }
   .hero-map-shade { background: linear-gradient(180deg, #0a1012 0%, #0a1012 34%, #0a1012cc 49%, #0a101200 66%, #0a101215 83%, #0a1012 100%); }
   .map-event-card { top: 535px; right: 3px; width: 225px; padding-inline: 14px; }
   .event-card-title h3 { font-size: 12px; }
