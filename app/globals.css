@@ -228,7 +228,9 @@
 .mobile-nav a { padding-block: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); font-size: 14px; }
 .hero { min-height: 675px; position: relative; isolation: isolate; overflow: hidden; background: var(--background); }
 .hero-map-layer { position: absolute; inset: 0; z-index: 0; }
-.crisis-map { height: 100%; width: 100%; background: #0a1215; font-family: var(--font-geist), sans-serif; }
+.crisis-map { height: 100%; width: 100%; background: #0a1215; font-family: var(--font-geist), sans-serif; cursor: grab; touch-action: pan-x pan-y pinch-zoom; }
+.crisis-map:active { cursor: grabbing; }
+.crisis-map .leaflet-container { touch-action: pan-x pan-y pinch-zoom; }
 .hero-map-shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, #0a1012e8 0%, #0a1012c4 28%, #0a10123d 57%, #0a101209 100%), linear-gradient(0deg, #0a1012 0%, transparent 21%, transparent 76%, #0a1012e0 100%); }
 .hero-inner { position: relative; z-index: 2; min-height: inherit; pointer-events: none; }
 .hero-inner button, .hero-inner a, .hero-inner select { pointer-events: auto; }
