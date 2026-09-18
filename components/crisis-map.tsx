@@ -4,15 +4,21 @@ import { useEffect } from 'react'
 import { MapContainer, GeoJSON, Marker, Polyline, useMap } from 'react-leaflet'
 import { divIcon, type LatLngExpression } from 'leaflet'
 import { feature } from 'topojson-client'
-import type { Topology, GeometryCollection } from 'topojson-specification'
-import type { FeatureCollection } from 'geojson'
+import type { FeatureCollection, GeometryCollection } from 'geojson'
 import worldData from 'world-atlas/countries-110m.json'
 import { LocateFixed, Minus, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { demoEvents, type DemoEvent, type EventType } from '@/lib/demo-events'
 
-const topology = worldData as unknown as Topology<{ countries: GeometryCollection }>
-const countries = feature(topology, topology.objects.countries) as FeatureCollection
+type WorldTopology = {
+  type: 'Topology'
+  objects: { countries: GeometryCollection }
+  arcs: number[][][]
+  transform?: { scale: [number, number]; translate: [number, number] }
+}
+
+const topology = worldData as unknown as WorldTopology
+const countries = feature(topology as Parameters<typeof feature>[0], topology.objects.countries as never) as unknown as FeatureCollection
 const land: FeatureCollection = { ...countries, features: countries.features.filter((country) => country.id !== '010') }
 const gridLines: LatLngExpression[][] = [
   ...[-60, -30, 0, 30, 60].map((latitude) => [[latitude, -180], [latitude, 180]] as LatLngExpression[]),
