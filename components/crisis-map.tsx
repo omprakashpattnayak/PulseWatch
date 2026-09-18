@@ -37,8 +37,19 @@ function MapControls({ exploring }: { exploring: boolean }) {
   const map = useMap()
 
   useEffect(() => {
-    if (exploring) map.dragging.enable()
-    else map.dragging.disable()
+    if (exploring) {
+      map.dragging.enable()
+      map.scrollWheelZoom.enable()
+      map.doubleClickZoom.enable()
+      map.touchZoom.enable()
+      map.keyboard.enable()
+    } else {
+      map.dragging.disable()
+      map.scrollWheelZoom.disable()
+      map.doubleClickZoom.disable()
+      map.touchZoom.disable()
+      map.keyboard.disable()
+    }
     const observer = new ResizeObserver(() => map.invalidateSize())
     observer.observe(map.getContainer())
     return () => observer.disconnect()
