@@ -26,7 +26,8 @@ export async function GET() {
     const response = await fetch(`${FIRMS_URL}/${encodeURIComponent(mapKey)}/VIIRS_SNPP_NRT/world/1`, { signal: controller.signal, cache: 'no-store', headers: { accept: 'text/csv' } })
     if (!response.ok) throw new Error(`NASA FIRMS returned ${response.status}`)
     const rows = parseCsv(await response.text())
-    const events = rows.flatMap((row, index) => {
+    // FIRMS can return tens of thousands of detections for a global day. Keep the interactive map responsive while preserving the newest records.
+    const events = rows.slice(-500).flatMap((row, index) => {
       const latitude = Number(row.latitude)
       const longitude = Number(row.longitude)
       if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return []

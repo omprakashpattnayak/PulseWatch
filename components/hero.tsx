@@ -64,13 +64,13 @@ export function Hero() {
         <div className="page-width hero-inner">
           <div className="hero-topline">
             <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
-            <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO LIVE SOURCES' : error && wildfireError ? 'LIVE SOURCES UNAVAILABLE · FALLBACK PINS' : 'LIVE SOURCES CONNECTED · USGS + NASA FIRMS'}</div>
+            <div className="prototype-label" suppressHydrationWarning><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO LIVE SOURCES' : error && wildfireError ? 'LIVE SOURCES UNAVAILABLE · FALLBACK PINS' : 'LIVE SOURCES CONNECTED · USGS + NASA FIRMS'}</div>
           </div>
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
             <div className="hero-introduction">
-              <h2>Live earthquake activity.<br />Clearer global context. <span>One live map.</span></h2>
-              <p>A focused crisis intelligence experience built around the live USGS earthquake feed — designed for people who need clear signal without five different websites.</p>
+              <h2>Live earthquake and wildfire activity.<br />Clearer global context. <span>One live map.</span></h2>
+              <p>A focused crisis intelligence experience combining live USGS earthquakes with NASA FIRMS wildfire detections — designed for people who need clear signal without five different websites.</p>
               <div className="hero-buttons">
                 <Button size="lg" onClick={() => setExploring(true)}><Crosshair data-icon="inline-start" /> Explore the map <ArrowUpRight data-icon="inline-end" /></Button>
                 <a href="#solution" className={buttonVariants({ variant: 'ghost', size: 'lg' })}>Discover the project <ArrowDown data-icon="inline-end" /></a>

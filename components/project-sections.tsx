@@ -81,7 +81,7 @@ export function DifferenceSection() {
 }
 
 const phases = [
-  { number: '01', status: 'LIVE NOW', title: 'One map. One feed.', description: 'A server-validated USGS earthquake feed with transparent informational scoring.', icon: Layers3 },
+  { number: '01', status: 'LIVE NOW', title: 'One map. Two feeds.', description: 'Server-validated USGS earthquake and NASA FIRMS wildfire feeds with transparent informational scoring.', icon: Layers3 },
   { number: '02', status: 'UP NEXT', title: 'Your region. Your alerts.', description: 'Opt-in subscriptions for the regions and hazard types that matter to each responder.', icon: Bell },
   { number: '03', status: 'IN THE FIELD', title: 'Built with responders.', description: 'Partner with an NGO to test the platform in real workflows and learn what actually helps.', icon: Handshake },
   { number: '04', status: 'LOOKING AHEAD', title: 'From reactive to ready.', description: 'Explore historical patterns to flag high-risk regions before events reach their peak.', icon: ScanLine },
