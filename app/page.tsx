@@ -1,6 +1,5 @@
 import { SiteHeader } from '@/components/site-header'
 import { Hero } from '@/components/hero'
-import { ContactSection } from '@/components/contact-section'
 import {
   ProblemSection,
   SolutionSection,
@@ -24,7 +23,6 @@ export default function Page() {
         <DifferenceSection />
         <RoadmapSection />
         <TeamSection />
-        <ContactSection />
       </main>
     </>
   )
