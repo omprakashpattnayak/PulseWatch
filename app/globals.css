@@ -801,6 +801,13 @@
 .dashboard-card h2 { margin-top: 18px; font-size: 48px; color: var(--primary); }
 .dashboard-card p:not(.eyebrow) { min-height: 54px; margin: 12px 0 24px; color: var(--muted-foreground); line-height: 1.6; }
 .dashboard-notice { max-width: 1000px; margin: 18px auto; padding: 12px 14px; border: 1px solid var(--border); color: var(--muted-foreground); }
+.closest-hazard-card { max-width: 1000px; margin: 28px auto 18px; padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid var(--border); border-left: 4px solid var(--muted-foreground); background: color-mix(in srgb, var(--card) 88%, transparent); }
+.closest-hazard-card.hazard-earthquake { border-left-color: #ff8146; }
+.closest-hazard-card.hazard-wildfire { border-left-color: #efbd58; }
+.closest-hazard-card h2 { margin: 6px 0 4px; font-size: clamp(20px, 3vw, 28px); }
+.closest-hazard-card p:not(.eyebrow) { margin: 0; color: var(--muted-foreground); line-height: 1.5; }
+.closest-hazard-card button { flex: 0 0 auto; min-height: 38px; padding: 0 14px; border: 1px solid var(--border); background: var(--foreground); color: var(--background); font-size: 12px; }
+@media (max-width: 640px) { .closest-hazard-card { align-items: stretch; flex-direction: column; } .closest-hazard-card button { width: 100%; } }
 .dashboard-form { display: grid; gap: 12px; margin: 18px 0 22px; padding: 16px; border: 1px solid var(--border); background: color-mix(in srgb, var(--background) 80%, transparent); }
 .dashboard-form label { display: grid; gap: 6px; color: var(--muted-foreground); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
 .dashboard-form input { min-height: 38px; border: 1px solid var(--input); background: var(--background); color: var(--foreground); padding: 8px 10px; font-size: 14px; }
