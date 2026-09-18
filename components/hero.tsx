@@ -34,7 +34,7 @@ export function Hero() {
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => setHasMounted(true), [])
   const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('/api/earthquakes', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
-  const { data: wildfireData, error: wildfireError } = useSWR<{ events: DemoEvent[]; source: string }>('/api/wildfires', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
+  const { data: wildfireData, error: wildfireError, mutate: mutateWildfire } = useSWR<{ events: DemoEvent[]; source: string }>('/api/wildfires', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
   const liveEvents = hasMounted ? (data?.events ?? []) : []
   const wildfireEvents = hasMounted ? (wildfireData?.events ?? []) : []
   const events = liveEvents.length > 0 || wildfireEvents.length > 0 ? [...liveEvents, ...wildfireEvents] : demoEvents.filter((event) => event.type === 'earthquake')
@@ -89,14 +89,14 @@ export function Hero() {
             </aside>
           )}
           <div className="hero-map-footer">
-            <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible disaster layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
-            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && (data?.source || wildfireData?.source) ? 'USGS + NASA FIRMS LIVE FEEDS' : error && wildfireError ? 'LIVE SOURCES UNAVAILABLE' : 'LIVE SOURCES CONNECTING'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
+            <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible live hazard layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
+            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && (data?.source || wildfireData?.source) ? 'USGS + NASA FIRMS LIVE FEEDS' : error && wildfireError ? 'LIVE SOURCES UNAVAILABLE' : 'LIVE SOURCES CONNECTING'}</span><span className="map-note-divider">/</span><span aria-live="polite">{visibleEvents.length} live events</span><button type="button" onClick={() => { void mutate(); void mutateWildfire() }} className="refresh-feed">Refresh feeds</button></p>
           </div>
           {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>
         <div className="map-attribution">Map: OpenStreetMap · Leaflet</div>
       </section>
-      <section className="source-strip" aria-label="Planned official data sources">
+      <section className="source-strip" aria-label="Live and planned official data sources">
         <div className="page-width source-strip-inner">
           <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>TWO LIVE SOURCES.<br /><strong>ONE CLEAR VIEW.</strong></span></div>
           <a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noreferrer" className="source-partner"><Activity aria-hidden="true" /><span><strong>USGS</strong><small>Earthquake intelligence</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
