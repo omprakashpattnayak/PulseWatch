@@ -56,7 +56,7 @@ export default function CrisisMap({ events, categories, selectedId, onSelect, ex
 }) {
   return (
     <MapContainer center={[19, 12]} zoom={2.25} minZoom={1.2} maxZoom={12} zoomDelta={0.5} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={true} scrollWheelZoom={exploring} doubleClickZoom={exploring} dragging={exploring} touchZoom={exploring} keyboard={exploring} className="crisis-map" aria-label="Interactive world map of live and illustrative disaster events">
-      <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" subdomains="abcd" maxZoom={20} attribution="&copy; OpenStreetMap contributors &copy; CARTO" />
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" subdomains="abc" maxZoom={19} attribution="&copy; OpenStreetMap contributors" />
       {events.filter((event) => categories.includes(event.type)).map((event) => (
         <Marker key={event.id} position={event.coordinates} title={`${event.url ? 'Live' : 'Illustrative'}: ${event.magnitude}, ${event.title}`} alt={`View ${event.url ? 'live' : 'illustrative'} ${event.type} event in ${event.location}`} icon={divIcon({ className: `event-marker marker-${event.type}${selectedId === event.id ? ' marker-selected' : ''}`, html: '<span class="marker-halo"></span><span class="marker-ring"></span><span class="marker-core"></span>', iconSize: [36, 36], iconAnchor: [18, 18] })} eventHandlers={{ click: () => onSelect(event) }} />
       ))}
