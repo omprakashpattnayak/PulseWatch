@@ -35,7 +35,7 @@ async function fetchUSGS(url: string): Promise<{ events: DemoEvent[]; source: st
 export function Hero() {
   const [exploring, setExploring] = useState(false)
   const [categories, setCategories] = useState<EventType[]>(allCategories)
-  const [selected, setSelected] = useState<DemoEvent | null>(demoEvents[0])
+  const [selected, setSelected] = useState<DemoEvent | null>(null)
   const [showDetails, setShowDetails] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => setHasMounted(true), [])
@@ -85,7 +85,7 @@ export function Hero() {
           {exploring && <div className="explore-header"><p>One planet. Every signal.</p><Button variant="outline" onClick={() => { setExploring(false); setShowDetails(false) }}><X data-icon="inline-start" /> Exit map view</Button></div>}
           {activeSelected && (
             <aside className={cn('map-event-card', `event-card-${activeSelected.type}`)} aria-label="Selected earthquake event" aria-live="polite">
-              <div className="event-card-top"><span><SelectedIcon size={13} aria-hidden="true" /> {eventCategories[activeSelected.type].label === 'Floods & climate' ? 'CLIMATE ALERT' : activeSelected.type.toUpperCase()}</span><span className="event-sample">{activeSelected.url ? 'LIVE EVENT' : 'DEMO EVENT'}</span></div>
+              <div className="event-card-top"><span><SelectedIcon size={13} aria-hidden="true" /> {eventCategories[activeSelected.type].label === 'Floods & climate' ? 'CLIMATE ALERT' : activeSelected.type.toUpperCase()}</span><span className="event-sample">{activeSelected.url ? 'LIVE EVENT' : 'ILLUSTRATIVE PIN'}</span></div>
               <div className="event-card-title"><h3>{activeSelected.title}</h3><Button variant="ghost" size="icon-xs" aria-label="Dismiss selected event" onClick={() => { setSelected(null); setShowDetails(false) }}><X /></Button></div>
               <div className="event-card-meta"><strong>{activeSelected.magnitude}</strong><span className="meta-divider" />{activeSelected.severity} severity<span className="event-source">{activeSelected.source}</span></div>
               {showDetails && <><p className="event-description">{activeSelected.description}</p>{activeSelected.url && <a className="event-official-link" href={activeSelected.url} target="_blank" rel="noreferrer">Open official USGS event <ArrowUpRight size={13} aria-hidden="true" /></a>}</>}
@@ -94,7 +94,7 @@ export function Hero() {
           )}
           <div className="hero-map-footer">
             <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible disaster layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
-            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && data?.source ? data.source : 'INTERACTIVE PREVIEW'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
+            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && data?.source ? data.source : error ? 'USGS FALLBACK VIEW' : 'USGS REAL-TIME FEED'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
           </div>
           {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an illustrative event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>
