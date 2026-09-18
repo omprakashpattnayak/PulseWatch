@@ -29,7 +29,7 @@ export function Hero() {
   const liveEvents = hasMounted ? (data?.events ?? []) : []
   const events = liveEvents.length > 0 ? liveEvents : demoEvents
   const visibleEvents = events.filter((event) => categories.includes(event.type))
-  const activeSelected = liveEvents.length > 0 && !selected?.url ? liveEvents[0] : selected
+  const activeSelected = selected
   const SelectedIcon = activeSelected ? categoryIcons[activeSelected.type] : Activity
 
   function changeCategories(values: string[]) {

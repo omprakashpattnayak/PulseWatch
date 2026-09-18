@@ -37,11 +37,19 @@ function MapControls({ exploring }: { exploring: boolean }) {
   const map = useMap()
 
   useEffect(() => {
-    map.dragging.enable()
-    map.scrollWheelZoom.enable()
-    map.doubleClickZoom.enable()
-    map.touchZoom.enable()
-    map.keyboard.enable()
+    if (exploring) {
+      map.dragging.enable()
+      map.scrollWheelZoom.enable()
+      map.doubleClickZoom.enable()
+      map.touchZoom.enable()
+      map.keyboard.enable()
+    } else {
+      map.dragging.disable()
+      map.scrollWheelZoom.disable()
+      map.doubleClickZoom.disable()
+      map.touchZoom.disable()
+      map.keyboard.disable()
+    }
     const observer = new ResizeObserver(() => map.invalidateSize())
     observer.observe(map.getContainer())
     return () => observer.disconnect()
@@ -72,7 +80,7 @@ export default function CrisisMap({ events, categories, selectedId, onSelect, ex
   exploring: boolean
 }) {
   return (
-    <MapContainer center={[19, 12]} zoom={2.25} minZoom={1} maxZoom={18} zoomDelta={1} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={false} scrollWheelZoom={true} doubleClickZoom={true} dragging={true} touchZoom={true} keyboard={true} className="crisis-map" aria-label="Interactive demonstration world map of illustrative disaster events">
+    <MapContainer center={[19, 12]} zoom={2.25} minZoom={1} maxZoom={18} zoomDelta={1} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={false} scrollWheelZoom={exploring} doubleClickZoom={exploring} dragging={exploring} touchZoom={exploring} keyboard={exploring} className="crisis-map" aria-label="Interactive demonstration world map of illustrative disaster events">
       {gridLines.map((positions, index) => <Polyline key={index} positions={positions} pathOptions={{ color: '#263539', weight: 0.65, opacity: 0.43 }} interactive={false} />)}
       <GeoJSON data={land} style={{ fillColor: '#152326', fillOpacity: 1, color: '#304043', weight: 0.6, opacity: 0.85 }} interactive={false} />
       {continentLabels.map(({ text, position }) => <Marker key={text} position={position} interactive={false} keyboard={false} icon={divIcon({ className: 'continent-label', html: text, iconSize: [130, 16], iconAnchor: [65, 8] })} />)}
