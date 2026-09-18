@@ -34,7 +34,7 @@ export function SolutionSection() {
   return (
     <section id="solution" className="solution-section section-surface" aria-labelledby="solution-heading"><div className="page-width project-section">
       <SectionLabel number="02">OUR SOLUTION</SectionLabel>
-      <div className="section-heading-grid"><h2 id="solution-heading">One planet.<br /><span className="text-primary">One shared picture.</span></h2><div><p>PulseWatch turns live USGS earthquakes, NASA FIRMS thermal detections, and GDACS disaster alerts into one interactive map. Every event is normalized, scored transparently, and color-coded for quick context.</p><Badge variant="outline" className="prototype-badge"><CircleDot data-icon="inline-start" /> Live USGS feed · Server-validated data</Badge></div></div>
+      <div className="section-heading-grid"><h2 id="solution-heading">One planet.<br /><span className="text-primary">One shared picture.</span></h2><div><p>PulseWatch turns live USGS earthquakes, NASA FIRMS thermal detections, and GDACS disaster alerts into one interactive map. Every event is normalized, scored transparently, and color-coded for quick context.</p><Badge variant="outline" className="prototype-badge"><CircleDot data-icon="inline-start" /> Three live feeds · Server-validated data</Badge></div></div>
       <div className="flow-steps">{steps.map((step, index) => <article key={step.title}><div className="flow-icon-row"><span className="flow-icon"><step.icon aria-hidden="true" /></span><span className="flow-connector" /><span className="flow-number">0{index + 1}</span></div><h3>{step.title}</h3><p>{step.body}</p></article>)}</div>
       <div className="solution-bottom"><ShieldCheck size={17} aria-hidden="true" /><p>Public information. Shared intelligence. <strong>A clearer path to action.</strong></p><a href="#map">Explore the live map <ArrowUpRight size={15} aria-hidden="true" /></a></div>
     </div></section>
@@ -45,9 +45,9 @@ const technologies = [
   { icon: Activity, tag: 'DATA SOURCE / 01', title: 'USGS Earthquake API', description: 'Public earthquake feeds with location, magnitude, depth, and event timestamps.', foot: 'Public API · No key required', href: 'https://earthquake.usgs.gov/earthquakes/feed/' },
   { icon: Satellite, tag: 'LIVE DATA LAYER / 02', title: 'NASA FIRMS', description: 'Satellite-based thermal anomaly detections with fire radiative power and confidence context.', foot: 'VIIRS SNPP NRT · Server fetched', href: 'https://firms.modaps.eosdis.nasa.gov/' },
   { icon: Earth, tag: 'LIVE DATA LAYER / 03', title: 'GDACS', description: 'Global Disaster Alert and Coordination System alerts for floods, cyclones, earthquakes, and other hazards.', foot: '24-hour official alert feed · Server fetched', href: 'https://www.gdacs.org/' },
-  { icon: Map, tag: 'THE VISUAL LAYER', title: 'Leaflet', description: 'An interactive, lightweight map with explorable USGS earthquake markers.', foot: 'Interactive map · Open source', href: 'https://leafletjs.com/' },
+  { icon: Map, tag: 'THE VISUAL LAYER', title: 'Leaflet', description: 'An interactive, lightweight map with explorable multi-hazard markers.', foot: 'Interactive map · Open source', href: 'https://leafletjs.com/' },
   { icon: Code2, tag: 'THE FOUNDATION', title: 'Next.js + React', description: 'A responsive web experience that works wherever a responder needs it. No installation required.', foot: 'Web-first · Built to scale', href: 'https://nextjs.org/' },
-  { icon: Braces, tag: 'THE INTELLIGENCE', title: 'Severity scoring', description: 'A transparent informational score using earthquake magnitude, depth, and recency.', foot: 'Explainable logic · No prediction', href: '#map' },
+  { icon: Braces, tag: 'THE INTELLIGENCE', title: 'Severity scoring', description: 'A transparent informational score using source severity, recency, and event context.', foot: 'Explainable logic · No prediction', href: '#map' },
 ]
 
 export function TechnologySection() {
@@ -56,7 +56,7 @@ export function TechnologySection() {
       <SectionLabel number="03">HOW IT&apos;S BUILT</SectionLabel>
       <div className="section-heading-grid"><h2 id="technology-heading">Real data.<br />Not another black box.</h2><p>We&apos;re not building a new network of sensors. We&apos;re making the extraordinary information that already exists easier to use.</p></div>
       <div className="technology-grid">{technologies.map((technology) => <article key={technology.title}><div className="technology-card-top"><technology.icon aria-hidden="true" /><a href={technology.href} target={technology.href.startsWith('http') ? '_blank' : undefined} rel={technology.href.startsWith('http') ? 'noreferrer' : undefined} aria-label={`Learn more about ${technology.title}`}><ArrowUpRight size={17} /></a></div><span className="eyebrow">{technology.tag}</span><h3>{technology.title}</h3><p>{technology.description}</p><span className="technology-foot"><span className="tiny-square" />{technology.foot}</span></article>)}</div>
-      <div className="hardware-note"><Zap aria-hidden="true" /><p><strong>No hardware. No sensors of our own.</strong> The planned platform runs entirely on real official data already being collected by government and space agencies.</p><span className="eyebrow">SOFTWARE. WITH PURPOSE.</span></div>
+      <div className="hardware-note"><Zap aria-hidden="true" /><p><strong>No hardware. No sensors of our own.</strong> The platform runs entirely on real official data already being collected by government and space agencies.</p><span className="eyebrow">SOFTWARE. WITH PURPOSE.</span></div>
     </section>
   )
 }

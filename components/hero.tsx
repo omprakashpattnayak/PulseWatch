@@ -71,8 +71,8 @@ export function Hero() {
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
             <div className="hero-introduction">
-              <h2>Live earthquake and wildfire activity.<br />Clearer global context. <span>One live map.</span></h2>
-              <p>A focused crisis intelligence experience combining live USGS earthquakes with NASA FIRMS wildfire detections — designed for people who need clear signal without five different websites.</p>
+              <h2>Live earthquake, wildfire, and disaster alerts.<br />Clearer global context. <span>One live map.</span></h2>
+              <p>A focused crisis intelligence experience combining live USGS earthquakes, NASA FIRMS wildfire detections, and GDACS disaster alerts — designed for people who need clear signal without five different websites.</p>
               <div className="hero-buttons">
                 <Button size="lg" onClick={() => setExploring(true)}><Crosshair data-icon="inline-start" /> Explore the map <ArrowUpRight data-icon="inline-end" /></Button>
                 <a href="#solution" className={buttonVariants({ variant: 'ghost', size: 'lg' })}>Discover the project <ArrowDown data-icon="inline-end" /></a>
@@ -98,12 +98,12 @@ export function Hero() {
         </div>
         <div className="map-attribution">Map: OpenStreetMap · Leaflet</div>
       </section>
-      <section className="source-strip" aria-label="Live and planned official data sources">
+      <section className="source-strip" aria-label="Live official data sources">
         <div className="page-width source-strip-inner">
           <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>THREE LIVE SOURCES.<br /><strong>ONE CLEAR VIEW.</strong></span></div>
           <a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noreferrer" className="source-partner"><Activity aria-hidden="true" /><span><strong>USGS</strong><small>Earthquake intelligence</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noreferrer" className="source-partner"><Globe2 aria-hidden="true" /><span><strong>NASA <span className="source-subname">FIRMS</span></strong><small>Live satellite detections</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
-          <a href="https://www.gdacs.org/" target="_blank" rel="noreferrer" className="source-partner"><Layers3 aria-hidden="true" /><span><strong>GDACS</strong><small>Planned alert layer</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
+          <a href="https://www.gdacs.org/" target="_blank" rel="noreferrer" className="source-partner"><Layers3 aria-hidden="true" /><span><strong>GDACS</strong><small>Live global disaster alerts</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <div className="source-integrity"><ShieldCheck size={17} aria-hidden="true" /><span>OFFICIAL DATA.<br />CLEAR STATUS.</span></div>
         </div>
       </section>
