@@ -6,7 +6,6 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const links = [
-  { label: 'Introduction', href: '#introduction' },
   { label: 'The problem', href: '#problem' },
   { label: 'Our solution', href: '#solution' },
   { label: 'The technology', href: '#technology' },
@@ -20,7 +19,7 @@ export function SiteHeader() {
     <header className="site-header">
       <a href="#main" className="skip-link">Skip to content</a>
       <div className="page-width header-inner">
-        <a className="brand" href="#main" aria-label="PulseWatch home">
+        <a className="brand" href="#" aria-label="PulseWatch home">
           <Activity className="brand-mark" aria-hidden="true" />
           <span>pulsewatch<span className="brand-period">.</span></span>
         </a>
@@ -28,7 +27,7 @@ export function SiteHeader() {
           {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
         </nav>
         <div className="header-actions">
-          <a className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'header-contact')} href="#introduction">
+          <a className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'header-contact')} href="#contact">
             Let&apos;s connect <ArrowUpRight data-icon="inline-end" />
           </a>
           <Button variant="ghost" size="icon" className="mobile-menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}>
@@ -39,7 +38,7 @@ export function SiteHeader() {
       {menuOpen && (
         <nav id="mobile-navigation" className="mobile-nav page-width" aria-label="Mobile navigation">
           {links.map((link) => <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>{link.label}<ArrowUpRight size={15} aria-hidden="true" /></a>)}
-          <a href="#introduction" onClick={() => setMenuOpen(false)}>Let&apos;s connect<ArrowUpRight size={15} aria-hidden="true" /></a>
+          <a href="#contact" onClick={() => setMenuOpen(false)}>Let&apos;s connect<ArrowUpRight size={15} aria-hidden="true" /></a>
         </nav>
       )}
     </header>
