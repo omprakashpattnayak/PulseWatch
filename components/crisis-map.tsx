@@ -1,25 +1,12 @@
 'use client'
 
 import { useEffect } from 'react'
-import { MapContainer, GeoJSON, Marker, useMap } from 'react-leaflet'
+import { MapContainer, Marker, useMap } from 'react-leaflet'
 import { divIcon } from 'leaflet'
-import { feature } from 'topojson-client'
-import type { FeatureCollection, GeometryCollection } from 'geojson'
-import worldData from 'world-atlas/countries-110m.json'
 import { LocateFixed, Minus, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { type DemoEvent, type EventType } from '@/lib/demo-events'
 
-type WorldTopology = {
-  type: 'Topology'
-  objects: { countries: GeometryCollection }
-  arcs: number[][][]
-  transform?: { scale: [number, number]; translate: [number, number] }
-}
-
-const topology = worldData as unknown as WorldTopology
-const countries = feature(topology as Parameters<typeof feature>[0], topology.objects.countries as never) as unknown as FeatureCollection
-const land: FeatureCollection = { ...countries, features: countries.features.filter((country) => country.id !== '010') }
 const continentLabels: { text: string; position: [number, number] }[] = [
   { text: 'NORTH AMERICA', position: [44, -110] },
   { text: 'SOUTH AMERICA', position: [-14, -59] },
@@ -77,7 +64,6 @@ export default function CrisisMap({ events, categories, selectedId, onSelect, ex
 }) {
   return (
     <MapContainer center={[19, 12]} zoom={2.25} minZoom={1} maxZoom={18} zoomDelta={1} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={false} scrollWheelZoom={exploring} doubleClickZoom={exploring} dragging={exploring} touchZoom={exploring} keyboard={exploring} className="crisis-map" aria-label="Interactive demonstration world map of illustrative disaster events">
-      <GeoJSON data={land} style={{ fillColor: '#152326', fillOpacity: 0.94, color: 'transparent', weight: 0, opacity: 0 }} interactive={false} />
       {continentLabels.map(({ text, position }) => <Marker key={text} position={position} interactive={false} keyboard={false} icon={divIcon({ className: 'continent-label', html: text, iconSize: [130, 16], iconAnchor: [65, 8] })} />)}
       {events.filter((event) => categories.includes(event.type)).map((event) => (
         <Marker key={event.id} position={event.coordinates} title={`Demo: ${event.magnitude}, ${event.title}`} alt={`View illustrative ${event.type} event in ${event.location}`} icon={divIcon({ className: `event-marker marker-${event.type}${selectedId === event.id ? ' marker-selected' : ''}`, html: '<span class="marker-halo"></span><span class="marker-ring"></span><span class="marker-core"></span>', iconSize: [36, 36], iconAnchor: [18, 18] })} eventHandlers={{ click: () => onSelect(event) }} />
