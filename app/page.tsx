@@ -8,6 +8,7 @@ import {
   ImpactSection,
   DifferenceSection,
   RoadmapSection,
+  TeamSection,
 } from '@/components/project-sections'
 
 export default function Page() {
@@ -22,6 +23,7 @@ export default function Page() {
         <ImpactSection />
         <DifferenceSection />
         <RoadmapSection />
+        <TeamSection />
         <ContactSection />
       </main>
     </>

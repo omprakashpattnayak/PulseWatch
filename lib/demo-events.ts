@@ -10,8 +10,6 @@ export type DemoEvent = {
   magnitude: string
   source: string
   description: string
-  url?: string
-  timestamp?: number
 }
 
 export const eventCategories: Record<EventType, { label: string; color: string }> = {

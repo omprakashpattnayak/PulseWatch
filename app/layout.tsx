@@ -9,12 +9,12 @@ const geistMono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono'
 
 export const metadata: Metadata = {
   title: 'PulseWatch — One Planet. Every Signal.',
-  description: 'PulseWatch brings earthquakes, wildfires, and disaster alerts into one unified global view for responders, NGOs, researchers, and communities.',
+  description: 'An IEEE YESIST12 student innovation project bringing earthquakes, wildfires, and disaster alerts into one unified global view. Explore the PulseWatch interactive prototype.',
   applicationName: 'PulseWatch',
-  keywords: ['PulseWatch', 'disaster intelligence', 'crisis map', 'USGS', 'NASA FIRMS', 'GDACS', 'humanitarian technology'],
+  keywords: ['PulseWatch', 'IEEE YESIST12', 'disaster intelligence', 'crisis map', 'USGS', 'NASA FIRMS', 'GDACS'],
   openGraph: {
     title: 'PulseWatch — One Planet. Every Signal.',
-    description: 'Every earthquake. Every wildfire. Every disaster alert. One live map. An independent crisis intelligence prototype for communities and responders.',
+    description: 'Every earthquake. Every wildfire. Every disaster alert. One live map. A student-built crisis intelligence prototype for IEEE YESIST12.',
     type: 'website',
   },
   generator: 'v0.app',
