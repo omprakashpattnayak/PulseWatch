@@ -24,7 +24,7 @@ export function ProblemSection() {
 }
 
 const steps = [
-  { icon: Radio, title: 'Collect the signal.', body: 'Read official USGS earthquakes and NASA FIRMS thermal detections through server-side routes.' },
+  { icon: Radio, title: 'Collect the signal.', body: 'Read official USGS earthquakes, NASA FIRMS thermal detections, and GDACS disaster alerts through server-side routes.' },
   { icon: Map, title: 'Connect the dots.', body: 'Plot each event on one interactive, globally accessible map.' },
   { icon: ScanLine, title: 'Surface what matters.', body: 'Normalize event signals into clear, color-coded severity indicators.' },
   { icon: Users, title: 'Make action clearer.', body: 'Give responders one shared picture. Less searching, faster decisions.' },
@@ -34,7 +34,7 @@ export function SolutionSection() {
   return (
     <section id="solution" className="solution-section section-surface" aria-labelledby="solution-heading"><div className="page-width project-section">
       <SectionLabel number="02">OUR SOLUTION</SectionLabel>
-      <div className="section-heading-grid"><h2 id="solution-heading">One planet.<br /><span className="text-primary">One shared picture.</span></h2><div><p>PulseWatch turns live USGS earthquakes and NASA FIRMS thermal detections into one interactive map. Every event is normalized, scored transparently, and color-coded for quick context.</p><Badge variant="outline" className="prototype-badge"><CircleDot data-icon="inline-start" /> Live USGS feed · Server-validated data</Badge></div></div>
+      <div className="section-heading-grid"><h2 id="solution-heading">One planet.<br /><span className="text-primary">One shared picture.</span></h2><div><p>PulseWatch turns live USGS earthquakes, NASA FIRMS thermal detections, and GDACS disaster alerts into one interactive map. Every event is normalized, scored transparently, and color-coded for quick context.</p><Badge variant="outline" className="prototype-badge"><CircleDot data-icon="inline-start" /> Live USGS feed · Server-validated data</Badge></div></div>
       <div className="flow-steps">{steps.map((step, index) => <article key={step.title}><div className="flow-icon-row"><span className="flow-icon"><step.icon aria-hidden="true" /></span><span className="flow-connector" /><span className="flow-number">0{index + 1}</span></div><h3>{step.title}</h3><p>{step.body}</p></article>)}</div>
       <div className="solution-bottom"><ShieldCheck size={17} aria-hidden="true" /><p>Public information. Shared intelligence. <strong>A clearer path to action.</strong></p><a href="#map">Explore the live map <ArrowUpRight size={15} aria-hidden="true" /></a></div>
     </div></section>
@@ -44,7 +44,7 @@ export function SolutionSection() {
 const technologies = [
   { icon: Activity, tag: 'DATA SOURCE / 01', title: 'USGS Earthquake API', description: 'Public earthquake feeds with location, magnitude, depth, and event timestamps.', foot: 'Public API · No key required', href: 'https://earthquake.usgs.gov/earthquakes/feed/' },
   { icon: Satellite, tag: 'LIVE DATA LAYER / 02', title: 'NASA FIRMS', description: 'Satellite-based thermal anomaly detections with fire radiative power and confidence context.', foot: 'VIIRS SNPP NRT · Server fetched', href: 'https://firms.modaps.eosdis.nasa.gov/' },
-  { icon: Earth, tag: 'PLANNED DATA LAYER / 03', title: 'GDACS', description: 'A planned global alert layer for floods, cyclones, and other hazards.', foot: 'Not connected yet', href: 'https://www.gdacs.org/' },
+  { icon: Earth, tag: 'LIVE DATA LAYER / 03', title: 'GDACS', description: 'Global Disaster Alert and Coordination System alerts for floods, cyclones, earthquakes, and other hazards.', foot: '24-hour official alert feed · Server fetched', href: 'https://www.gdacs.org/' },
   { icon: Map, tag: 'THE VISUAL LAYER', title: 'Leaflet', description: 'An interactive, lightweight map with explorable USGS earthquake markers.', foot: 'Interactive map · Open source', href: 'https://leafletjs.com/' },
   { icon: Code2, tag: 'THE FOUNDATION', title: 'Next.js + React', description: 'A responsive web experience that works wherever a responder needs it. No installation required.', foot: 'Web-first · Built to scale', href: 'https://nextjs.org/' },
   { icon: Braces, tag: 'THE INTELLIGENCE', title: 'Severity scoring', description: 'A transparent informational score using earthquake magnitude, depth, and recency.', foot: 'Explainable logic · No prediction', href: '#map' },
@@ -81,7 +81,7 @@ export function DifferenceSection() {
 }
 
 const phases = [
-  { number: '01', status: 'LIVE NOW', title: 'One map. Two feeds.', description: 'Server-validated USGS earthquake and NASA FIRMS wildfire feeds with transparent informational scoring.', icon: Layers3 },
+  { number: '01', status: 'LIVE NOW', title: 'One map. Three feeds.', description: 'Server-validated USGS earthquake, NASA FIRMS wildfire, and GDACS alert feeds with transparent informational scoring.', icon: Layers3 },
   { number: '02', status: 'UP NEXT', title: 'Your region. Your alerts.', description: 'Opt-in subscriptions for the regions and hazard types that matter to each responder.', icon: Bell },
   { number: '03', status: 'IN THE FIELD', title: 'Built with responders.', description: 'Partner with an NGO to test the platform in real workflows and learn what actually helps.', icon: Handshake },
   { number: '04', status: 'LOOKING AHEAD', title: 'From reactive to ready.', description: 'Explore historical patterns to flag high-risk regions before events reach their peak.', icon: ScanLine },
