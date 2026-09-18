@@ -16,20 +16,11 @@ const CrisisMap = dynamic(() => import('@/components/crisis-map'), {
 })
 const categoryIcons = { earthquake: Activity, wildfire: Flame, climate: Waves }
 const allCategories: EventType[] = ['earthquake', 'wildfire', 'climate']
-type USGSFeature = { id: string; geometry: { coordinates: [number, number, number] }; properties: { mag: number | null; place: string | null; time: number | null; url: string | null; title: string | null } }
-type USGSResponse = { features: USGSFeature[] }
-
 async function fetchUSGS(url: string): Promise<{ events: DemoEvent[]; source: string }> {
-  const response = await fetch(url)
-  if (!response.ok) throw new Error('USGS feed unavailable')
-  const payload = await response.json() as USGSResponse
-  const events = payload.features.filter((feature) => feature.geometry?.coordinates?.length >= 2).map((feature): DemoEvent => {
-    const magnitude = feature.properties.mag ?? 0
-    const timestamp = feature.properties.time ?? Date.now()
-    const place = feature.properties.place ?? 'Unknown location'
-    return { id: feature.id, type: 'earthquake', title: place, location: place, coordinates: [feature.geometry.coordinates[1], feature.geometry.coordinates[0]], severity: magnitude >= 5 ? 'High' : 'Moderate', magnitude: `M ${magnitude.toFixed(1)}`, source: 'USGS REAL-TIME', description: `${new Date(timestamp).toLocaleString()} · Depth ${Math.round(feature.geometry.coordinates[2] ?? 0)} km`, url: feature.properties.url ?? undefined, timestamp }
-  })
-  return { events, source: 'USGS EARTHQUAKE HAZARDS PROGRAM' }
+  const response = await fetch(url, { cache: 'no-store' })
+  if (!response.ok) throw new Error('Stored USGS feed unavailable')
+  const payload = await response.json() as { events: Array<{ id: string; magnitude: string | null; place: string; latitude: number; longitude: number; depthKm: number | null; occurredAt: string; eventUrl: string | null }>; source: string }
+  return { source: payload.source, events: payload.events.map((event) => ({ id: event.id, type: 'earthquake', title: event.place, location: event.place, coordinates: [event.latitude, event.longitude], severity: Number(event.magnitude ?? 0) >= 5 ? 'High' : 'Moderate', magnitude: `M ${Number(event.magnitude ?? 0).toFixed(1)}`, source: 'USGS REAL-TIME', description: `${new Date(event.occurredAt).toLocaleString()} · Depth ${Math.round(event.depthKm ?? 0)} km`, url: event.eventUrl ?? undefined, timestamp: new Date(event.occurredAt).getTime() })) }
 }
 
 export function Hero() {
@@ -39,7 +30,7 @@ export function Hero() {
   const [showDetails, setShowDetails] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => setHasMounted(true), [])
-  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
+  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('/api/earthquakes', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
   const liveEvents = hasMounted ? (data?.events ?? []) : []
   const events = liveEvents.length > 0 ? [...demoEvents.filter((event) => event.type !== 'earthquake'), ...liveEvents] : demoEvents
   const visibleEvents = events.filter((event) => categories.includes(event.type))
