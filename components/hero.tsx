@@ -15,7 +15,7 @@ const CrisisMap = dynamic(() => import('@/components/crisis-map'), {
   loading: () => <div className="map-loading"><Globe2 aria-hidden="true" /><span>Preparing global view</span></div>,
 })
 const categoryIcons = { earthquake: Activity, wildfire: Flame, climate: Waves }
-const allCategories: EventType[] = ['earthquake']
+const allCategories: EventType[] = ['earthquake', 'wildfire']
 type USGSFeature = { id: string; geometry: { coordinates: [number, number, number] }; properties: { mag: number | null; place: string | null; time: number | null; url: string | null; title: string | null } }
 type USGSResponse = { features: USGSFeature[] }
 
@@ -34,8 +34,10 @@ export function Hero() {
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => setHasMounted(true), [])
   const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('/api/earthquakes', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
+  const { data: wildfireData, error: wildfireError } = useSWR<{ events: DemoEvent[]; source: string }>('/api/wildfires', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
   const liveEvents = hasMounted ? (data?.events ?? []) : []
-  const events = liveEvents.length > 0 ? liveEvents : demoEvents.filter((event) => event.type === 'earthquake')
+  const wildfireEvents = hasMounted ? (wildfireData?.events ?? []) : []
+  const events = liveEvents.length > 0 || wildfireEvents.length > 0 ? [...liveEvents, ...wildfireEvents] : demoEvents.filter((event) => event.type === 'earthquake')
   const visibleEvents = events.filter((event) => categories.includes(event.type))
   const activeSelected = selected
   const SelectedIcon = activeSelected ? categoryIcons[activeSelected.type] : Activity
@@ -62,7 +64,7 @@ export function Hero() {
         <div className="page-width hero-inner">
           <div className="hero-topline">
             <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
-            <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE · FALLBACK PINS' : 'LIVE FEED CONNECTED · USGS REAL-TIME'}</div>
+            <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO LIVE SOURCES' : error && wildfireError ? 'LIVE SOURCES UNAVAILABLE · FALLBACK PINS' : 'LIVE SOURCES CONNECTED · USGS + NASA FIRMS'}</div>
           </div>
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
@@ -88,7 +90,7 @@ export function Hero() {
           )}
           <div className="hero-map-footer">
             <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible disaster layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
-            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && data?.source ? data.source : error ? 'USGS FALLBACK VIEW' : 'USGS REAL-TIME FEED'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
+            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && (data?.source || wildfireData?.source) ? 'USGS + NASA FIRMS LIVE FEEDS' : error && wildfireError ? 'LIVE SOURCES UNAVAILABLE' : 'LIVE SOURCES CONNECTING'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
           </div>
           {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>
@@ -96,15 +98,15 @@ export function Hero() {
       </section>
       <section className="source-strip" aria-label="Planned official data sources">
         <div className="page-width source-strip-inner">
-          <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>ONE LIVE SOURCE.<br /><strong>ONE CLEAR VIEW.</strong></span></div>
+          <div className="source-strip-heading"><Radio size={17} aria-hidden="true" /><span>TWO LIVE SOURCES.<br /><strong>ONE CLEAR VIEW.</strong></span></div>
           <a href="https://earthquake.usgs.gov/earthquakes/feed/" target="_blank" rel="noreferrer" className="source-partner"><Activity aria-hidden="true" /><span><strong>USGS</strong><small>Earthquake intelligence</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
-          <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noreferrer" className="source-partner"><Globe2 aria-hidden="true" /><span><strong>NASA <span className="source-subname">FIRMS</span></strong><small>Planned fire layer</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
+          <a href="https://firms.modaps.eosdis.nasa.gov/" target="_blank" rel="noreferrer" className="source-partner"><Globe2 aria-hidden="true" /><span><strong>NASA <span className="source-subname">FIRMS</span></strong><small>Live satellite detections</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <a href="https://www.gdacs.org/" target="_blank" rel="noreferrer" className="source-partner"><Layers3 aria-hidden="true" /><span><strong>GDACS</strong><small>Planned alert layer</small></span><ArrowUpRight size={13} aria-hidden="true" /></a>
           <div className="source-integrity"><ShieldCheck size={17} aria-hidden="true" /><span>OFFICIAL DATA.<br />CLEAR STATUS.</span></div>
         </div>
       </section>
       <div className="page-width project-facts" aria-label="Project at a glance">
-        <div><strong>01</strong><span>Live data source</span></div><div><strong>01</strong><span>Unified global view</span></div><div><strong>00</strong><span>Hardware required</span></div><div className="fact-final"><Globe2 aria-hidden="true" /><span>Global perspective.<br /><strong>Local impact.</strong></span><a href="#problem" aria-label="Scroll to the problem"><ArrowDown size={18} /></a></div>
+        <div><strong>02</strong><span>Live data sources</span></div><div><strong>01</strong><span>Unified global view</span></div><div><strong>00</strong><span>Hardware required</span></div><div className="fact-final"><Globe2 aria-hidden="true" /><span>Global perspective.<br /><strong>Local impact.</strong></span><a href="#problem" aria-label="Scroll to the problem"><ArrowDown size={18} /></a></div>
       </div>
     </>
   )
