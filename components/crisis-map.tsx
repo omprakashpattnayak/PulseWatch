@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { MapContainer, GeoJSON, Marker, useMap } from 'react-leaflet'
+import { MapContainer, TileLayer, GeoJSON, Marker, useMap } from 'react-leaflet'
 import { divIcon } from 'leaflet'
 import { feature } from 'topojson-client'
 import type { FeatureCollection, GeometryCollection } from 'geojson'
@@ -76,8 +76,9 @@ export default function CrisisMap({ events, categories, selectedId, onSelect, ex
   exploring: boolean
 }) {
   return (
-    <MapContainer center={[19, 12]} zoom={2.25} minZoom={1} maxZoom={18} zoomDelta={1} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={false} scrollWheelZoom={exploring} doubleClickZoom={exploring} dragging={exploring} touchZoom={exploring} keyboard={exploring} className="crisis-map" aria-label="Interactive world map of live and illustrative disaster events">
-      <GeoJSON data={land} style={{ fillColor: '#152326', fillOpacity: 0.88, color: '#2a3a3d', weight: 0.55, opacity: 0.62, lineCap: 'round', lineJoin: 'round' }} interactive={false} />
+    <MapContainer center={[19, 12]} zoom={2.25} minZoom={1.2} maxZoom={12} zoomDelta={0.5} zoomSnap={0.1} wheelPxPerZoomLevel={80} zoomAnimation={true} zoomControl={false} attributionControl={false} scrollWheelZoom={exploring} doubleClickZoom={exploring} dragging={exploring} touchZoom={exploring} keyboard={exploring} className="crisis-map" aria-label="Interactive world map of live and illustrative disaster events">
+      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" subdomains="abc" maxZoom={19} opacity={0.22} attribution="&copy; OpenStreetMap contributors" />
+      <GeoJSON data={land} style={{ fillColor: '#172629', fillOpacity: 0.34, color: '#536d71', weight: 0.45, opacity: 0.58, lineCap: 'round', lineJoin: 'round' }} interactive={false} />
       {continentLabels.map(({ text, position }) => <Marker key={text} position={position} interactive={false} keyboard={false} icon={divIcon({ className: 'continent-label', html: text, iconSize: [130, 16], iconAnchor: [65, 8] })} />)}
       {events.filter((event) => categories.includes(event.type)).map((event) => (
         <Marker key={event.id} position={event.coordinates} title={`${event.url ? 'Live' : 'Illustrative'}: ${event.magnitude}, ${event.title}`} alt={`View ${event.url ? 'live' : 'illustrative'} ${event.type} event in ${event.location}`} icon={divIcon({ className: `event-marker marker-${event.type}${selectedId === event.id ? ' marker-selected' : ''}`, html: '<span class="marker-halo"></span><span class="marker-ring"></span><span class="marker-core"></span>', iconSize: [36, 36], iconAnchor: [18, 18] })} eventHandlers={{ click: () => onSelect(event) }} />

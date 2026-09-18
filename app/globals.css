@@ -239,7 +239,10 @@
 .hero-map-layer::after { content: ''; position: absolute; inset: 0; border: 1px solid #53656833; pointer-events: none; z-index: 4; }
 .crisis-map { height: 100%; width: 100%; background: #0a1215; font-family: var(--font-geist), sans-serif; cursor: grab; touch-action: pan-x pan-y pinch-zoom; }
 .crisis-map:active { cursor: grabbing; }
-.crisis-map .leaflet-container { touch-action: pan-x pan-y pinch-zoom; }
+.crisis-map .leaflet-container { touch-action: pan-x pan-y pinch-zoom; background: #0b1518; }
+.crisis-map .leaflet-tile-pane { filter: grayscale(1) invert(0.86) hue-rotate(150deg) saturate(0.38) contrast(1.12); }
+.crisis-map .leaflet-tile { image-rendering: auto; }
+.crisis-map .leaflet-control-attribution { display: none; }
 .hero-map-shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, #0a1012e8 0%, #0a1012c4 28%, #0a10123d 57%, #0a101209 100%), linear-gradient(0deg, #0a1012 0%, transparent 21%, transparent 76%, #0a1012e0 100%); }
 .hero-inner { position: relative; z-index: 2; min-height: inherit; pointer-events: none; }
 .hero-inner button, .hero-inner a, .hero-inner select { pointer-events: auto; }
@@ -314,8 +317,9 @@
 .marker-selected .marker-ring { width: 23px; height: 23px; }
 .marker-selected .marker-halo { width: 46px; height: 46px; }
 .event-marker:hover .marker-core { width: 9px; height: 9px; }
-.map-zoom-controls { position: absolute; right: 20px; bottom: 105px; z-index: 500; display: flex; flex-direction: column; gap: 4px; }
-.map-zoom-controls button { width: 29px; height: 29px; background: #111b1ee8; border-color: #344347; color: #aebec2; }
+.map-zoom-controls { position: absolute; right: 20px; bottom: 105px; z-index: 500; display: flex; flex-direction: column; gap: 5px; padding: 5px; border: 1px solid #324548; border-radius: 5px; background: #0b1518c7; box-shadow: 0 10px 28px #0007; backdrop-filter: blur(8px); }
+.map-zoom-controls button { width: 31px; height: 31px; background: #111b1ee8; border-color: #344347; color: #aebec2; }
+.map-zoom-controls button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .is-exploring .hero-introduction { display: none; }
 .is-exploring .hero h1 { font-size: 62px; }
 .is-exploring .hero-copy { margin-top: 25px; }
