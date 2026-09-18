@@ -27,8 +27,9 @@ export function SiteHeader() {
           {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
         </nav>
         <div className="header-actions">
-          <a className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'header-contact')} href="#contact">
-            Let&apos;s connect <ArrowUpRight data-icon="inline-end" />
+          <a className="header-dashboard-link" href="/dashboard">Dashboard</a>
+          <a className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'header-contact')} href="/sign-in">
+            Sign in <ArrowUpRight data-icon="inline-end" />
           </a>
           <Button variant="ghost" size="icon" className="mobile-menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X /> : <Menu />}
@@ -38,6 +39,8 @@ export function SiteHeader() {
       {menuOpen && (
         <nav id="mobile-navigation" className="mobile-nav page-width" aria-label="Mobile navigation">
           {links.map((link) => <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>{link.label}<ArrowUpRight size={15} aria-hidden="true" /></a>)}
+          <a href="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard<ArrowUpRight size={15} aria-hidden="true" /></a>
+          <a href="/sign-in" onClick={() => setMenuOpen(false)}>Sign in<ArrowUpRight size={15} aria-hidden="true" /></a>
           <a href="#contact" onClick={() => setMenuOpen(false)}>Let&apos;s connect<ArrowUpRight size={15} aria-hidden="true" /></a>
         </nav>
       )}

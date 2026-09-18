@@ -229,6 +229,8 @@
 .desktop-nav a:hover, .desktop-nav a:focus-visible { color: var(--primary); }
 .desktop-nav a:hover::after, .desktop-nav a:focus-visible::after { right: 0; }
 .header-actions { display: flex; align-items: center; gap: 10px; }
+.header-dashboard-link { color: var(--muted-foreground); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+.header-dashboard-link:hover { color: var(--primary); }
 .header-contact { padding-inline: 15px; border-radius: 3px; font-size: 11px; height: 36px; gap: 12px; border-color: #a34f2e; box-shadow: inset 0 0 0 1px #ff81461c, 0 0 22px #ff81460d; }
 .header-contact:hover { border-color: var(--primary); color: var(--primary); background: #ff81460d; }
 .mobile-menu-toggle { display: none; }
