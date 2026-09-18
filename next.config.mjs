@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // react-leaflet manages an imperative DOM container and is not compatible with React 19's dev-only StrictMode effect replay.
+  reactStrictMode: false,
   async headers() {
     return [{
       source: '/(.*)',
