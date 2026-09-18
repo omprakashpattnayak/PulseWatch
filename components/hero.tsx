@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import dynamic from 'next/dynamic'
 import { Activity, ArrowDown, ArrowRight, ArrowUpRight, Crosshair, Flame, Globe2, Layers3, Radio, ShieldCheck, Waves, X } from 'lucide-react'
@@ -23,8 +23,10 @@ export function Hero() {
   const [categories, setCategories] = useState<EventType[]>(allCategories)
   const [selected, setSelected] = useState<DemoEvent | null>(demoEvents[0])
   const [showDetails, setShowDetails] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
+  useEffect(() => setHasMounted(true), [])
   const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; fetchedAt: string; source: string }>('/api/earthquakes', fetcher, { refreshInterval: 300000, revalidateOnFocus: false })
-  const liveEvents = data?.events ?? []
+  const liveEvents = hasMounted ? (data?.events ?? []) : []
   const events = liveEvents.length > 0 ? liveEvents : demoEvents
   const visibleEvents = events.filter((event) => categories.includes(event.type))
   const activeSelected = liveEvents.length > 0 && !selected?.url ? liveEvents[0] : selected
@@ -52,7 +54,7 @@ export function Hero() {
         <div className="page-width hero-inner">
           <div className="hero-topline">
             <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
-            <div className="prototype-label"><span className={cn('status-dot', error && 'status-dot-error')} /> {isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE' : 'LIVE USGS FEED'}</div>
+            <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE' : 'LIVE USGS FEED'}</div>
           </div>
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
@@ -78,7 +80,7 @@ export function Hero() {
           )}
           <div className="hero-map-footer">
             <div className="map-filters"><span className="eyebrow legend-label">MAP LAYERS</span><ToggleGroup multiple value={categories} onValueChange={changeCategories} aria-label="Visible disaster layers" size="sm" spacing={1}>{allCategories.map((category) => <ToggleGroupItem key={category} value={category} aria-label={`Toggle ${eventCategories[category].label.toLowerCase()}`}><span className={cn('legend-dot', `dot-${category}`)} />{eventCategories[category].label}</ToggleGroupItem>)}</ToggleGroup></div>
-            <p className="map-demo-note"><span className="demo-note-desktop">{data?.source ?? 'USGS EARTHQUAKE HAZARDS PROGRAM'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
+            <p className="map-demo-note"><span className="demo-note-desktop">{hasMounted && data?.source ? data.source : 'INTERACTIVE PREVIEW'}</span><span className="map-note-divider">/</span><span aria-live="polite">{liveEvents.length || visibleEvents.length} earthquakes</span><button type="button" onClick={() => mutate()} className="refresh-feed">Refresh feed</button></p>
           </div>
           {exploring && <div className="accessible-event-picker"><label htmlFor="event-picker">Explore an event</label><select id="event-picker" value={selected?.id ?? ''} onChange={(event) => { const found = visibleEvents.find((item) => item.id === event.target.value); if (found) selectEvent(found) }}><option value="">Select an illustrative event</option>{visibleEvents.map((event) => <option key={event.id} value={event.id}>{event.location} — {event.magnitude}</option>)}</select></div>}
         </div>
