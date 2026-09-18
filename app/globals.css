@@ -798,6 +798,10 @@
 .auth-card a { color: var(--primary); font-size: 13px; }
 .dashboard-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; max-width: 1000px; margin: 0 auto; padding-bottom: 44px; border-bottom: 1px solid var(--border); }
 .dashboard-header p:not(.eyebrow) { margin-top: 12px; color: var(--muted-foreground); }
+.dashboard-back-link { display: inline-block; margin-bottom: 16px; color: var(--muted-foreground); font-size: 12px; }
+.dashboard-back-link:hover, .dashboard-contact-link:hover { color: var(--primary); }
+.dashboard-header-actions { display: flex; align-items: center; gap: 14px; }
+.dashboard-contact-link { color: var(--muted-foreground); font-size: 12px; }
 .dashboard-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; max-width: 1000px; margin: 28px auto; }
 .dashboard-card { min-height: 250px; padding: 26px; border: 1px solid var(--border); background: var(--card); }
 .dashboard-card h2 { margin-top: 18px; font-size: 48px; color: var(--primary); }

@@ -24,12 +24,14 @@ export function SiteHeader() {
           <span>pulsewatch<span className="brand-period">.</span></span>
         </a>
         <nav className="desktop-nav" aria-label="Main navigation">
+          <a href="/">Home</a>
           {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
+          <a href="#contact">Let&apos;s connect</a>
         </nav>
         <div className="header-actions">
           <a className="header-dashboard-link" href="/dashboard">Dashboard</a>
-          <a className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'header-contact')} href="/sign-in">
-            Sign in <ArrowUpRight data-icon="inline-end" />
+          <a className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'header-contact')} href="#contact">
+            Let&apos;s connect <ArrowUpRight data-icon="inline-end" />
           </a>
           <Button variant="ghost" size="icon" className="mobile-menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} aria-controls="mobile-navigation" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X /> : <Menu />}
