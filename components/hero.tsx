@@ -20,16 +20,10 @@ type USGSFeature = { id: string; geometry: { coordinates: [number, number, numbe
 type USGSResponse = { features: USGSFeature[] }
 
 async function fetchUSGS(url: string): Promise<{ events: DemoEvent[]; source: string }> {
-  const response = await fetch(url)
+  const response = await fetch(url, { cache: 'no-store' })
   if (!response.ok) throw new Error('USGS feed unavailable')
-  const payload = await response.json() as USGSResponse
-  const events = payload.features.filter((feature) => feature.geometry?.coordinates?.length >= 2).map((feature): DemoEvent => {
-    const magnitude = feature.properties.mag ?? 0
-    const timestamp = feature.properties.time ?? Date.now()
-    const place = feature.properties.place ?? 'Unknown location'
-    return { id: feature.id, type: 'earthquake', title: place, location: place, coordinates: [feature.geometry.coordinates[1], feature.geometry.coordinates[0]], severity: magnitude >= 5 ? 'High' : 'Moderate', magnitude: `M ${magnitude.toFixed(1)}`, source: 'USGS REAL-TIME', description: `${new Date(timestamp).toLocaleString()} · Depth ${Math.round(feature.geometry.coordinates[2] ?? 0)} km`, url: feature.properties.url ?? undefined, timestamp }
-  })
-  return { events, source: 'USGS EARTHQUAKE HAZARDS PROGRAM' }
+  const payload = await response.json() as { events: DemoEvent[]; source: string }
+  return payload
 }
 
 export function Hero() {
@@ -39,7 +33,7 @@ export function Hero() {
   const [showDetails, setShowDetails] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => setHasMounted(true), [])
-  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
+  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('/api/earthquakes', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
   const liveEvents = hasMounted ? (data?.events ?? []) : []
   const events = liveEvents.length > 0 ? liveEvents : demoEvents.filter((event) => event.type === 'earthquake')
   const visibleEvents = events.filter((event) => categories.includes(event.type))
