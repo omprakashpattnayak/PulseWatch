@@ -32,7 +32,7 @@ export function DashboardClient({ user, watchlist }: { user: { name: string; ema
   const router = useRouter()
   const [pending, startTransition] = useTransition()
   const [notice, setNotice] = useState('')
-  const [position, setPosition] = useState<[number, number] | null>(null)
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
   const [locationState, setLocationState] = useState<'idle' | 'loading' | 'ready' | 'denied'>('idle')
   const { data: earthquakes } = useSWR<FeedResponse>('/api/earthquakes', fetcher, { refreshInterval: 300000 })
   const { data: wildfires } = useSWR<FeedResponse>('/api/wildfires', fetcher, { refreshInterval: 300000 })
@@ -41,7 +41,7 @@ export function DashboardClient({ user, watchlist }: { user: { name: string; ema
     if (!navigator.geolocation) { setLocationState('denied'); return }
     setLocationState('loading')
     navigator.geolocation.getCurrentPosition(
-      ({ coords }) => { setPosition([coords.latitude, coords.longitude]); setLocationState('ready') },
+      ({ coords }) => { setUserLocation([coords.latitude, coords.longitude]); setLocationState('ready') },
       () => setLocationState('denied'),
       { enableHighAccuracy: false, maximumAge: 300000, timeout: 10000 },
     )
@@ -50,12 +50,12 @@ export function DashboardClient({ user, watchlist }: { user: { name: string; ema
   useEffect(() => { locateMe() }, [])
 
   const nearest = useMemo(() => {
-    if (!position) return null
+    if (!userLocation) return null
     return [...(earthquakes?.events ?? []), ...(wildfires?.events ?? [])]
       .filter((hazard) => hazard.coordinates?.length === 2)
-      .map((hazard) => ({ hazard, distance: distanceKm(position, hazard.coordinates) }))
+      .map((hazard) => ({ hazard, distance: distanceKm(userLocation, hazard.coordinates) }))
       .sort((a, b) => a.distance - b.distance)[0] ?? null
-  }, [position, earthquakes, wildfires])
+  }, [userLocation, earthquakes, wildfires])
 
   function submit(action: (formData: FormData) => Promise<void>, event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setNotice('')
@@ -63,13 +63,16 @@ export function DashboardClient({ user, watchlist }: { user: { name: string; ema
     startTransition(async () => { try { await action(new FormData(form)); form.reset(); setNotice('Saved.'); router.refresh() } catch { setNotice('Could not save that item. Check the values and try again.') } })
   }
 
+  const nearestIsImmediate = nearest !== null && nearest.distance < 100
+  const hazardTypeLabel = nearest?.hazard.type === 'wildfire' ? 'Wildfire' : 'Earthquake'
+
   return <main className="dashboard-page"><header className="dashboard-header"><div><p className="eyebrow">PULSEWATCH / CONTROL ROOM</p><h1>Your watchlist.</h1><p>Signed in as {user.email}. Monitor places and define the signal that matters.</p></div><button type="button" onClick={async () => { await signOut(); router.push('/'); router.refresh() }}>Sign out</button></header>
     <section className={`closest-hazard-card ${nearest ? `hazard-${nearest.hazard.type}` : ''}`} aria-live="polite">
-      <div><p className="eyebrow">CLOSEST ACTIVE HAZARD</p><h2>{nearest ? nearest.hazard.title : locationState === 'loading' ? 'Finding your location…' : locationState === 'denied' ? 'Location access unavailable' : 'Waiting for live feeds…'}</h2><p>{nearest ? `${nearest.distance < 1 ? '<1' : Math.round(nearest.distance).toLocaleString()} km away · ${nearest.hazard.magnitude} · ${nearest.hazard.source}` : locationState === 'denied' ? 'Allow location access to calculate distance to active earthquakes and wildfire detections.' : 'We compare your location with current USGS earthquakes and NASA FIRMS fire detections.'}</p></div><button type="button" onClick={locateMe} disabled={locationState === 'loading'}>{locationState === 'ready' ? 'Update location' : 'Use my location'}</button>
+      <div className="closest-hazard-content"><p className="eyebrow">CLOSEST ACTIVE HAZARD ALERT</p><div className="closest-hazard-heading"><span className="hazard-type-label">{nearest && <span className="hazard-type-mark" aria-hidden="true">{nearest.hazard.type === 'wildfire' ? 'FIRE' : 'SEISMIC'}</span>}{hazardTypeLabel}</span>{nearest && <span className={`hazard-status-badge ${nearestIsImmediate ? 'immediate' : 'monitor'}`}>{nearestIsImmediate ? 'Immediate Proximity' : 'Monitor Distance'}</span>}</div><h2>{nearest ? nearest.hazard.title : locationState === 'loading' ? 'Finding your location…' : locationState === 'denied' ? 'Location access unavailable' : 'Waiting for live feeds…'}</h2><p>{nearest ? `Nearest threat is ${nearest.distance < 1 ? '<1' : Math.round(nearest.distance).toLocaleString()} km away from you · ${nearest.hazard.location}` : locationState === 'denied' ? 'Allow location access to calculate distance to active earthquakes and wildfire detections.' : 'We compare your location with current USGS earthquakes and NASA FIRMS fire detections.'}</p></div><button type="button" onClick={locateMe} disabled={locationState === 'loading'}>{locationState === 'ready' ? 'Update location' : 'Use my location'}</button>
     </section>
     {notice && <p className="dashboard-notice" role="status">{notice}</p>}
     <section className="dashboard-grid">
-      <article className="dashboard-card"><p className="eyebrow">SAVED REGIONS · {watchlist.regions.length}</p><h2>{watchlist.regions.length}</h2><p>{watchlist.regions.length ? 'Your monitored locations appear below.' : 'Save a region to monitor nearby events.'}</p><ActionForm type="region" pending={pending} position={position} onLocate={locateMe} onSubmit={(event) => submit(createRegion, event)} />{watchlist.regions.map((region) => <div className="dashboard-item" key={region.id}><span><strong>{region.name}</strong><small>{region.latitude.toFixed(2)}, {region.longitude.toFixed(2)} · {region.radiusKm} km radius</small></span><button type="button" onClick={() => startTransition(async () => { await deleteRegion(region.id); router.refresh() })}>Remove</button></div>)}</article>
+      <article className="dashboard-card"><p className="eyebrow">SAVED REGIONS · {watchlist.regions.length}</p><h2>{watchlist.regions.length}</h2><p>{watchlist.regions.length ? 'Your monitored locations appear below.' : 'Save a region to monitor nearby events.'}</p><ActionForm type="region" pending={pending} position={userLocation} onLocate={locateMe} onSubmit={(event) => submit(createRegion, event)} />{watchlist.regions.map((region) => <div className="dashboard-item" key={region.id}><span><strong>{region.name}</strong><small>{region.latitude.toFixed(2)}, {region.longitude.toFixed(2)} · {region.radiusKm} km radius</small></span><button type="button" onClick={() => startTransition(async () => { await deleteRegion(region.id); router.refresh() })}>Remove</button></div>)}</article>
       <article className="dashboard-card"><p className="eyebrow">ALERT RULES · {watchlist.rules.length}</p><h2>{watchlist.rules.length}</h2><p>{watchlist.rules.length ? 'Rules are ready for the alert delivery layer.' : 'Create an alert rule for significant earthquakes.'}</p><ActionForm type="rule" pending={pending} onSubmit={(event) => submit(createRule, event)} />{watchlist.rules.map((rule) => <div className="dashboard-item" key={rule.id}><span><strong>{rule.name}</strong><small>M {rule.minMagnitude}+ · {rule.enabled ? 'Enabled' : 'Paused'}</small></span><span className="dashboard-actions"><button type="button" onClick={() => startTransition(async () => { await toggleRule(rule.id, !rule.enabled); router.refresh() })}>{rule.enabled ? 'Pause' : 'Enable'}</button><button type="button" onClick={() => startTransition(async () => { await deleteRule(rule.id); router.refresh() })}>Remove</button></span></div>)}</article>
     </section>
   </main>

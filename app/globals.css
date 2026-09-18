@@ -806,8 +806,16 @@
 .closest-hazard-card { max-width: 1000px; margin: 28px auto 18px; padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid var(--border); border-left: 4px solid var(--muted-foreground); background: color-mix(in srgb, var(--card) 88%, transparent); }
 .closest-hazard-card.hazard-earthquake { border-left-color: #ff8146; }
 .closest-hazard-card.hazard-wildfire { border-left-color: #efbd58; }
+.closest-hazard-content { min-width: 0; }
 .closest-hazard-card h2 { margin: 6px 0 4px; font-size: clamp(20px, 3vw, 28px); }
 .closest-hazard-card p:not(.eyebrow) { margin: 0; color: var(--muted-foreground); line-height: 1.5; }
+.closest-hazard-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.hazard-type-label { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.hazard-type-mark { color: var(--muted-foreground); font-size: 10px; letter-spacing: .12em; }
+.hazard-status-badge { display: inline-flex; align-items: center; min-height: 24px; padding: 0 9px; border: 1px solid currentColor; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.hazard-status-badge.immediate { color: #ff5e5e; animation: proximity-blink 1.2s ease-in-out infinite; }
+.hazard-status-badge.monitor { color: #d4a94f; }
+@keyframes proximity-blink { 50% { opacity: .42; } }
 .closest-hazard-card button { flex: 0 0 auto; min-height: 38px; padding: 0 14px; border: 1px solid var(--border); background: var(--foreground); color: var(--background); font-size: 12px; }
 @media (max-width: 640px) { .closest-hazard-card { align-items: stretch; flex-direction: column; } .closest-hazard-card button { width: 100%; } }
 .dashboard-form { display: grid; gap: 12px; margin: 18px 0 22px; padding: 16px; border: 1px solid var(--border); background: color-mix(in srgb, var(--background) 80%, transparent); }
