@@ -71,7 +71,7 @@ export function Hero() {
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
             <div className="hero-introduction">
-              <h2>Live earthquake, wildfire, and disaster alerts.<br />Clearer global context. <span>One live map.</span></h2>
+              <h2>Live earthquake activity, wildfire detections, and disaster alerts.<br />Clearer global context. <span>One live map.</span></h2>
               <p>A focused crisis intelligence experience combining live USGS earthquakes, NASA FIRMS wildfire detections, and GDACS disaster alerts — designed for people who need clear signal without five different websites.</p>
               <div className="hero-buttons">
                 <Button size="lg" onClick={() => setExploring(true)}><Crosshair data-icon="inline-start" /> Explore the map <ArrowUpRight data-icon="inline-end" /></Button>
