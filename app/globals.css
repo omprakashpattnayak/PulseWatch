@@ -493,7 +493,10 @@
 .competition-link:hover { color: var(--primary); }
 .contact-form { border: 1px solid var(--border); padding: 29px; background: #0e1719; }
 .contact-form h3 { font-size: 20px; font-weight: 500; letter-spacing: -0.6px; }
-.contact-form > p:first-of-type { font-size: 11px; line-height: 1.8; color: #9faeb0; margin-top: 9px; margin-bottom: 24px; }
+.contact-form > p:first-of-type { font-size: 11px; line-height: 1.8; color: #9faeb0; margin-top: 9px; margin-bottom: 14px; }
+.contact-links { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; }
+.contact-links a { display: inline-flex; align-items: center; gap: 7px; color: #b7c0c1; font-size: 11px; transition: color 160ms; }
+.contact-links a:hover, .contact-links a:focus-visible { color: var(--primary); }
 .contact-form [data-slot="field-label"] { font-size: 10px; color: #c8d2d3; font-weight: 400; }
 .contact-form [data-slot="input"], .contact-form [data-slot="textarea"] { border-radius: 2px; font-size: 11px; background: #101a1c; padding-inline: 12px; }
 .contact-form [data-slot="input"] { height: 39px; }

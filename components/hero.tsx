@@ -16,7 +16,21 @@ const CrisisMap = dynamic(() => import('@/components/crisis-map'), {
 })
 const categoryIcons = { earthquake: Activity, wildfire: Flame, climate: Waves }
 const allCategories: EventType[] = ['earthquake', 'wildfire', 'climate']
-const fetcher = (url: string) => fetch(url).then((response) => response.json())
+type USGSFeature = { id: string; geometry: { coordinates: [number, number, number] }; properties: { mag: number | null; place: string | null; time: number | null; url: string | null; title: string | null } }
+type USGSResponse = { features: USGSFeature[] }
+
+async function fetchUSGS(url: string): Promise<{ events: DemoEvent[]; source: string }> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error('USGS feed unavailable')
+  const payload = await response.json() as USGSResponse
+  const events = payload.features.filter((feature) => feature.geometry?.coordinates?.length >= 2).map((feature): DemoEvent => {
+    const magnitude = feature.properties.mag ?? 0
+    const timestamp = feature.properties.time ?? Date.now()
+    const place = feature.properties.place ?? 'Unknown location'
+    return { id: feature.id, type: 'earthquake', title: place, location: place, coordinates: [feature.geometry.coordinates[1], feature.geometry.coordinates[0]], severity: magnitude >= 5 ? 'High' : 'Moderate', magnitude: `M ${magnitude.toFixed(1)}`, source: 'USGS REAL-TIME', description: `${new Date(timestamp).toLocaleString()} · Depth ${Math.round(feature.geometry.coordinates[2] ?? 0)} km`, url: feature.properties.url ?? undefined, timestamp }
+  })
+  return { events, source: 'USGS EARTHQUAKE HAZARDS PROGRAM' }
+}
 
 export function Hero() {
   const [exploring, setExploring] = useState(false)
@@ -25,9 +39,9 @@ export function Hero() {
   const [showDetails, setShowDetails] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   useEffect(() => setHasMounted(true), [])
-  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; fetchedAt: string; source: string }>('/api/earthquakes', fetcher, { refreshInterval: 300000, revalidateOnFocus: false })
+  const { data, error, isLoading, mutate } = useSWR<{ events: DemoEvent[]; source: string }>('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson', fetchUSGS, { refreshInterval: 300000, revalidateOnFocus: false, keepPreviousData: true })
   const liveEvents = hasMounted ? (data?.events ?? []) : []
-  const events = liveEvents.length > 0 ? liveEvents : demoEvents
+  const events = liveEvents.length > 0 ? [...demoEvents.filter((event) => event.type !== 'earthquake'), ...liveEvents] : demoEvents
   const visibleEvents = events.filter((event) => categories.includes(event.type))
   const activeSelected = selected
   const SelectedIcon = activeSelected ? categoryIcons[activeSelected.type] : Activity
@@ -54,7 +68,7 @@ export function Hero() {
         <div className="page-width hero-inner">
           <div className="hero-topline">
             <div className="eyebrow competition-label"><span className="tiny-square" /> OPEN CRISIS INTELLIGENCE PROJECT</div>
-            <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE' : 'LIVE USGS FEED'}</div>
+            <div className="prototype-label"><span className={cn('status-dot', hasMounted && error && 'status-dot-error')} /> {!hasMounted || isLoading ? 'CONNECTING TO USGS' : error ? 'USGS FEED UNAVAILABLE · FALLBACK PINS' : 'LIVE FEED CONNECTED · USGS REAL-TIME'}</div>
           </div>
           <div className="hero-copy">
             <h1 id="hero-title">Pulse<span>Watch</span><span className="title-period">.</span></h1>
