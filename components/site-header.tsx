@@ -26,7 +26,6 @@ export function SiteHeader() {
         <nav className="desktop-nav" aria-label="Main navigation">
           <a href="/">Home</a>
           {links.map((link) => <a key={link.href} href={link.href}>{link.label}</a>)}
-          <a href="#contact">Let&apos;s connect</a>
         </nav>
         <div className="header-actions">
           <a className="header-dashboard-link" href="/dashboard">Dashboard</a>
