@@ -63,7 +63,7 @@ export function Hero() {
   return (
     <>
       <section className={cn('hero', exploring && 'is-exploring')} id="map" aria-labelledby="hero-title">
-        <div className="hero-map-layer"><CrisisMap events={events} categories={categories} selectedId={activeSelected?.id ?? null} onSelect={selectEvent} exploring={exploring} />{anyFeedLoading && <div className="map-feed-overlay" role="status" aria-live="polite"><span className="map-feed-spinner" aria-hidden="true" /><span>Establishing secure connection to USGS &amp; NASA global telemetry feeds...</span></div>}{hasMounted && !anyFeedLoading && anyFeedOffline && <div className="map-feed-overlay map-feed-offline" role="status" aria-live="polite"><span className="map-feed-status-dot" aria-hidden="true" /><span>Feed Offline</span></div>}</div>
+        <div className="hero-map-layer"><CrisisMap events={events} categories={categories} selectedId={activeSelected?.id ?? null} onSelect={selectEvent} exploring={exploring} />{anyFeedLoading && <div className="map-feed-overlay" role="status" aria-live="polite"><span className="map-feed-spinner" aria-hidden="true" /><span>Connecting to live hazard feeds...</span></div>}{hasMounted && !anyFeedLoading && anyFeedOffline && <div className="map-feed-overlay map-feed-offline" role="status" aria-live="polite"><span className="map-feed-status-dot" aria-hidden="true" /><span>Feed Offline</span></div>}</div>
         <div className="hero-map-shade" aria-hidden="true" />
         <div className="page-width hero-inner">
           <div className="hero-topline">
