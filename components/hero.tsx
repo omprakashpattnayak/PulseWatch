@@ -10,10 +10,9 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { eventCategories, type DemoEvent, type EventType } from '@/lib/demo-events'
 import { cn } from '@/lib/utils'
 
-const CrisisMap = dynamic(() => import('@/components/crisis-map'), {
+  const CrisisMap = dynamic(() => import('@/components/crisis-map'), {
   ssr: false,
-  loading: () => <div className="map-loading"><Globe2 aria-hidden="true" /><span>Preparing global view</span></div>,
-})
+  })
 const categoryIcons = { earthquake: Activity, wildfire: Flame, climate: Waves }
 const allCategories: EventType[] = ['earthquake', 'wildfire', 'climate']
 type USGSFeature = { id: string; geometry: { coordinates: [number, number, number] }; properties: { mag: number | null; place: string | null; time: number | null; url: string | null; title: string | null } }
