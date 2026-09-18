@@ -1,11 +1,9 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/auth-client'
 
 export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
-  const router = useRouter()
   const [error, setError] = useState('')
   const [pending, setPending] = useState(false)
 
@@ -13,11 +11,11 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
     event.preventDefault(); setPending(true); setError('')
     const form = new FormData(event.currentTarget)
     const result = mode === 'sign-in'
-      ? await signIn.email({ email: String(form.get('email')), password: String(form.get('password')) })
-      : await signUp.email({ name: String(form.get('name')), email: String(form.get('email')), password: String(form.get('password')) })
+      ? await signIn.email({ email: String(form.get('email')), password: String(form.get('password')), callbackURL: '/dashboard' })
+      : await signUp.email({ name: String(form.get('name')), email: String(form.get('email')), password: String(form.get('password')), callbackURL: '/dashboard' })
     setPending(false)
-    if (result.error) { setError('Unable to authenticate with those details.'); return }
-    router.push('/dashboard'); router.refresh()
+    if (result.error) { console.error('[v0] Authentication failed:', result.error); setError('Unable to authenticate with those details.'); return }
+    window.location.assign('/dashboard')
   }
 
   return <form onSubmit={submit} className="auth-form">
